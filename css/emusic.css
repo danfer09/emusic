@@ -1,0 +1,58 @@
+@font-face {
+  font-family:"Pacifico";
+  src: url("fonts/Pacifico-regular.woff");
+}
+#header{
+	background-color:#C0C0C0;
+}
+
+#emociones{
+
+}
+div[subrayado="true"]{
+	text-decoration: underline;
+}
+div[color="feliz"] div{
+	background-color:#FFD700;
+}
+div[color="serio"] div{
+	background-color:#FA8072;
+}
+div[color="triste"] div{
+	background-color:#696969;
+}
+a#emociones{
+	color:#000000;
+}
+#feliz{
+	font-family:"Pacifico",cursive;
+	width:33.333%;
+	border: 5px solid black;
+	text-align: center;
+	float:left;
+}
+
+#serio{
+	font-family:"Pacifico",cursive;
+	width:33.333%;
+	border: 5px solid black;
+	text-align: center;
+	float:left;
+}
+
+#triste{
+	font-family:"Pacifico",cursive;
+	width:33.333%;
+	border: 5px solid black;
+	text-align: center;
+	float:left;
+}
+
+#lista_canciones{
+	font-family:"Pacifico",cursive;
+	border: 5px solid black;
+	text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	background-color:#FFFFFF;
+}
