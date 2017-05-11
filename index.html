@@ -2,30 +2,29 @@
 <html lang="es">
 <head>
  	<meta charset="UTF-8">
- 	<meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>EMusic</title>
-	<link rel="stylesheet" type="text/css" href="css/emusic.css">
-	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css">
-	<link rel="icon" href="img/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
+	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
 	<script src="js/jquery-2.2.4.min.js"></script>
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
 
 	<div data-role="page" id="musicPlayer">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<h1>Welcome To EMusic</h1>
+		<header data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>EMUSIC</h1>
+		</header>
+
+		<div data-role="content" class="ui-content">
+			<p>Bienvenido a EMUSIC</p>
+			<a href="todas_canciones.html" data-role="button">MI MÚSICA</a>
 		</div>
 
-
-		<div data-role="main" class="ui-content">
-			<p>I Am Now A Mobile Developer!!</p>
-		</div>
-		<div data-role="footer" data-position="fixed" data-tap-toggle="false" id="musicControls">
-
-		</div>
+		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
+            <h3 id="copyright">Creado por Daniel F. y Samuel G.</h3>
+            <a id="credits-button" href="info.html" data-icon="info" data-iconpos="notext" class="ui-btn-right">Más información</a>
+        </footer>
 	</div>
 
 </body>
