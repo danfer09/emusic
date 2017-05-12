@@ -13,32 +13,33 @@
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
-	<div data-role="header" id="header">
-		<div class = "row">
-			<div class="col-xs-1"><a href="index.html" class="ui-btn ui-icon-gear ui-btn-icon-notext"></a></div>
-			<div class="col-xs-8"></div>
-			<div class="col-xs-1"><a href="#" class="ui-btn ui-icon-delete ui-btn-icon-notext"></a></div>
-			<div class="col-xs-1"><a href="todas_canciones.html" class="ui-btn ui-icon-bullets ui-btn-icon-notext"></a></div>
-			<div class="col-xs-1"><a href="index.html" class="ui-btn ui-icon-home ui-btn-icon-notext"></a></div>
+	<div data-role="page" id="page_feliz" color="triste">
+		<div data-role="header" id="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="todas_canciones.html" class="ui-btn ui-icon-bullets ui-corner-all ui-btn-icon-top">Otras canciones</a></li>
+	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
+		      		<li><a href="opciones.html" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
+			    </ul>
+			</div>
 		</div>
-	</div>
 
-	<div id="container" color="triste">
-		<div id="emociones">
-			<div id="feliz"><a href="feliz.html" id="emociones">Feliz</a></div>
-			<div id="serio"><a href="serio.html" id="emociones">Serio</a></div>
-			<div id="triste" subrayado="true"><a href="triste.html" id="emociones">Triste</a></div>
-			<div id="container_lista_canciones">
-				<div id="lista_canciones">
-					<p>Cancion1</p>
-					<p>Cancion2</p>
-					<p>Cancion3</p>
-					<p>Cancion4</p>
-					<p>Cancion5</p>
+		<div data_role="main" class ="ui-content" id="container">
+			<div id="emociones">
+				<div id="feliz"><a href="feliz.html" id="emociones">Feliz</a></div>
+				<div id="serio"><a href="serio.html" id="emociones">Serio</a></div>
+				<div id="triste" subrayado="true"><a href="triste.html" id="emociones">Triste</a></div>
+				<div id="container_lista_canciones">
+					<div id="lista_canciones">
+						<p>Cancion1</p>
+						<p>Cancion2</p>
+						<p>Cancion3</p>
+						<p>Cancion4</p>
+						<p>Cancion5</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>

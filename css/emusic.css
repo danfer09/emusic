@@ -3,7 +3,8 @@
   src: url("fonts/Pacifico-regular.woff");
 }
 #header{
-	background-color:#C0C0C0;
+	border-color: #000000;
+	background-color:#000000;
 }
 
 #emociones{
