@@ -1,6 +1,6 @@
 @font-face {
   font-family:"Pacifico";
-  src: url("fonts/Pacifico-regular.woff");
+  src: url("../fonts/Pacifico-Regular.woff");
 }
 #header{
 	border-color: #000000;
@@ -61,4 +61,23 @@ a#emociones{
 	margin-left: 10%;
 	margin-right: 10%;
 	background-color:#FFFFFF;
+}
+
+#player-page,
+#musicPlayer,
+#musicPlayer a,
+#files-list-page {
+	font-family:"Pacifico",cursive;
+}
+
+#player {
+	text-align: center;
+}
+
+#player-play img {
+	width: 80px;
+	height: 80px;
+}
+#player-play img:active {
+	opacity: 0.8;
 }

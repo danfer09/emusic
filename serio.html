@@ -3,17 +3,43 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Felicidad</title>
+	<title>Seriedad</title>
 	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
 	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+	<script src="js/jquery-1.12.4.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery-2.2.4.min.js"></script>
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
-	<div data-role="page" id="page_feliz" color="serio">
+	<div data-role="page" id="page_feliz">
+
+		<div data-role="panel" id="panelOpciones">
+		    <h2>Opciones</h2>
+		    <form method="post" action="">
+	      		<fieldset data-role="controlgroup">
+			      	<legend>Desea iniciar canción al subir el volumen</legend>
+			        <label for="boton_si">Si</label>
+			        <input type="radio" class="hidden" name="botones_volumen" id="boton_si" value="si">
+			        <label for="boton_no">No</label>
+			        <input type="radio" class="hidden" name="botones_volumen" id="boton_no" value="no">
+		      	</fieldset>
+
+		      	<fieldset data-role="controlgroup">
+			      	<legend>Color de fondo en la pantalla de inicio</legend>
+			        <label for="boton_azul">Azul</label>
+			        <input type="radio" class="hidden" name="botones_color" id="boton_azul" value="azul">
+			        <label for="boton_morado">Morado</label>
+			        <input type="radio" class="hidden" name="botones_color" id="boton_morado" value="morado">
+			        <label for="boton_verde">Verde</label>
+			        <input type="radio" class="hidden" name="botones_color" id="boton_verde" value="verde">
+		      	</fieldset>
+
+		      	<input type="submit" data-inline="true" value="Submit">
+		    </form>
+		</div>
+
 		<div data-role="header" id="header">
 			<div data-role="navbar">
 				<ul>
@@ -24,7 +50,8 @@
 			</div>
 		</div>
 
-		<div data_role="main" class ="ui-content" id="container">
+		<div data_role="main" class ="ui-content" id="container" color="serio">
+			<a href="#panelOpciones" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Opciones</a>
 			<div id="emociones">
 				<div id="feliz"><a href="feliz.html" id="emociones">Feliz</a></div>
 				<div id="serio" subrayado="true"><a href="serio.html" id="emociones">Serio</a></div>

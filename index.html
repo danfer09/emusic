@@ -6,19 +6,48 @@
 	<title>EMusic</title>
 	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
 	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
-	<script src="js/jquery-2.2.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+ 	<script src="js/jquery-1.12.4.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
+	<script src="cordova.js"></script>
+	<script src="js/appFile.js"></script>
+	<script src="js/application.js"></script>
+	<script src="js/utility.js"></script>
+	<script src="js/player.js"></script>
+	<script src="js/emusic.js"></script>
+	<script>
+		$(document).on('pagebeforecreate orientationchange', Application.updateIcons);
+		$(document).one('deviceready', Application.initApplication);
+	</script>
 </head>
 <body>
 
 	<div data-role="page" id="musicPlayer">
 		<header data-role="header" data-position="fixed" data-tap-toggle="false">
 			<h1>EMUSIC</h1>
+			<a href="#closePopup" id="closeApp" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all">Salir</a>
+
+			<div data-role="popup" id="closePopup" class="ui-content" data-overlay-theme="a">
+	      		<h6>¿Realmente desea salir de EMUSIC?</h6>
+	      		<div class="ui-grid-b">
+			    	<div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-btn-inline">NO</a></div>
+			    	<div class="ui-block-b"></div>
+			    	<div class="ui-block-c"><a href="#" class="ui-btn ui-btn-inline">SI</a></div>
+			    </div>
+	    	</div>
 		</header>
 
 		<div data-role="content" class="ui-content">
 			<p>Bienvenido a EMUSIC</p>
 			<a href="todas_canciones.html" data-role="button">MI MÚSICA</a>
+			<ul data-role="listview" data-inset="true">
+				<li data-role="list-divider">¿Cómo te sientes?</li>
+				<li><a href="feliz.html" data-role="button">Estoy FELIZ :)</a></li>
+				<li><a href="serio.html" data-role="button">Estoy SERIO :|</a></li>
+				<li><a href="triste.html" data-role="button">Estoy TRISTE :(</a></li>
+			</ul>
 		</div>
 
 		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">

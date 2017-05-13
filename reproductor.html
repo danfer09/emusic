@@ -6,7 +6,8 @@
 	<title>EMusic</title>
 	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
 	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
-	<script src="js/jquery-2.2.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+	<script src="js/jquery-1.12.4.js"></script>
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
@@ -19,14 +20,14 @@
 			<div id="player">
 				<div id="media-info">
 					<p>Canción: <span id="media-name"></span></p>
-					<p>Ubicación: <span id="media-path"></span></p>
+					<!--<p>Ubicación: <span id="media-path"></span></p>-->
 					<div>
-						Reproduciendo: <label id="media-played">-</label> of <label id="media-duration">-</label>
+						<span id="media-played">-</span> / <span id="media-duration">-</span>
 						<input type="range" name="time-slider" id="time-slider" value="0" min="0" max="100" data-highlight="true" />
 					</div>
 				</div>
-				<a href="#" id="player-play" title="Play / Pause"></a>
-				<a href="#" id="player-stop" title="Stop"></a>
+				<a href="#" id="player-play" title="Play / Pause"><img src="img/play.png"></a>
+				<!--<a href="#" id="player-stop" title="Stop"></a>-->
 			</div>
 		</div>
     </div>

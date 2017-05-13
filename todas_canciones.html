@@ -6,19 +6,19 @@
       <title>EMusic</title>
       <link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
       <link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
-      <script src="js/jquery-2.2.4.min.js"></script>
+   <script src="js/jquery-1.12.4.js"></script>
       <script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
    </head>
    <body>
       <div id="files-list-page" data-role="page">
          <header data-role="header">
-            <a href="#" data-icon="back" data-iconpos="notext" data-rel="back" title="Go back">Atrás</a>
+            <a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
             <h1>MI MÚSICA</h1>
-            <a href="#" id="update-button" data-icon="refresh" data-iconpos="notext">Refrescar</a>
+            <a href="#" id="update-button" data-icon="refresh" data-iconpos="notext" class="ui-mini">Refrescar</a>
          </header>
          <div data-role="content">
-            <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete">
-               <li><a href="reproductor.html" data-role="button">Canción ejemplo</a></li>
+            <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete" data-filter-placeholder="Buscar...">
+               <!-- <li><a href="reproductor.html" data-role="button">Canción ejemplo</a></li> -->
             </ul>
          </div>
          <footer data-role="footer" data-position="fixed" data-tap-toggle="false">
