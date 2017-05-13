@@ -10,12 +10,17 @@
 #emociones{
 
 }
+
+#panelOpciones{
+	background-color: #C0C0C0;
+}
 div[subrayado="true"]{
 	text-decoration: underline;
 }
 div[color="feliz"] div{
 	background-color:#FFD700;
 }
+
 div[color="serio"] div{
 	background-color:#FA8072;
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Opciones</title>
+	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
+	<link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery-2.2.4.min.js"></script>
+	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+
+	<div data-role="page" id="page_opciones">
+
+		<div data-role="panel" id="panelOpciones">
+		    <h2>Opciones</h2>
+		    <form method="post" action="">
+	      		<fieldset data-role="controlgroup">
+			      	<legend>Desea iniciar canción al subir el volumen</legend>
+			        <label for="boton_si">Si</label>
+			        <input type="radio" name="botones_volumen" id="boton_si" value="si">
+			        <label for="boton_no">No</label>
+			        <input type="radio" name="botones_volumen" id="boton_no" value="no">
+		      	</fieldset>
+
+		      	<fieldset data-role="controlgroup">
+			      	<legend>Color de fondo en la pantalla de inicio</legend>
+			        <label for="boton_azul">Azul</label>
+			        <input type="radio" name="botones_color" id="boton_azul" value="azul">
+			        <label for="boton_morado">Morado</label>
+			        <input type="radio" name="botones_color" id="boton_morado" value="morado">
+			        <label for="boton_verde">Verde</label>
+			        <input type="radio" name="botones_color" id="boton_verde" value="verde">
+		      	</fieldset>
+
+		      	<input type="submit" data-inline="true" value="Submit">
+		    </form>
+		</div>
+		<div data-role="header" id="header">
+			<div data-role="navbar">
+				<ul>
+					<li><a href="todas_canciones.html" class="ui-btn ui-icon-bullets ui-corner-all ui-btn-icon-top">Otras canciones</a></li>
+	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
+		      		<li><a href="opciones.html" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
+			    </ul>
+			</div>
+		</div>
+
+		<div data_role="main" class ="ui-content" id="container">
+			<a href="#panelOpciones" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Opciones</a>
+		</div>
+	</div>
+</body>
+</html>

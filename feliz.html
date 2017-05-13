@@ -13,7 +13,33 @@
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
-	<div data-role="page" id="page_feliz" color="feliz">
+	<div data-role="page" id="page_feliz">
+		<div data-role="panel" id="panelOpciones">
+		    <h2>Opciones</h2>
+		    <form method="post" action="">
+	      		<fieldset data-role="controlgroup">
+			      	<legend>Desea iniciar canción al subir el volumen</legend>
+			        <label for="boton_si">Si</label>
+			        <input type="radio" name="botones_volumen" id="boton_si" value="si">
+			        <label for="boton_no">No</label>
+			        <input type="radio" name="botones_volumen" id="boton_no" value="no">
+		      	</fieldset>
+
+		      	<fieldset data-role="controlgroup">
+			      	<legend>Color de fondo en la pantalla de inicio</legend>
+			        <label for="boton_azul">Azul</label>
+			        <input type="radio" name="botones_color" id="boton_azul" value="azul">
+			        <label for="boton_morado">Morado</label>
+			        <input type="radio" name="botones_color" id="boton_morado" value="morado">
+			        <label for="boton_verde">Verde</label>
+			        <input type="radio" name="botones_color" id="boton_verde" value="verde">
+		      	</fieldset>
+
+		      	<input type="submit" data-inline="true" value="Submit">
+		    </form>
+		</div>
+
+
 		<div data-role="header" id="header">
 			<div data-role="navbar">
 				<ul>
@@ -36,7 +62,8 @@
 			</div>
 		</div>
 
-		<div data_role="main" class ="ui-content" id="container">
+		<div data_role="main" class ="ui-content" id="container" color="feliz">
+			<a href="#panelOpciones" class="ui-btn ui-btn-inline ui-corner-all ui-shadow">Opciones</a>
 			<div id="emociones">
 				<div id="feliz" subrayado="true"><a href="feliz.html" id="emociones">Feliz</a></div>
 				<div id="serio"><a href="serio.html" id="emociones">Serio</a></div>
