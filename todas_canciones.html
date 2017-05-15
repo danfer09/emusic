@@ -5,14 +5,20 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>EMusic</title>
       <link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
-      <link rel="stylesheet" type="text/css" href="vendor/jquery.mobile/jquery.mobile-1.4.5.min.css" media="all">
+      <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" media="all">
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"/>
+      <script src="js/jquery-2.2.4.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/jquery.mobile-1.4.5.min.js"></script>
+      <script src="js/emusic.js"></script>
    </head>
    <body>
       <div id="files-list-page" data-role="page">
          <header data-role="header">
             <a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
             <h1>MI MÚSICA</h1>
-            <a href="#" id="update-button" data-icon="refresh" data-iconpos="notext" class="ui-mini">Refrescar</a>
+            <a href="#" onclick="buscarAudio('file://storage/0')" id="update-button" data-icon="refresh" data-iconpos="notext" class="ui-mini">Refrescar</a>
          </header>
          <div data-role="content">
             <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete" data-filter-placeholder="Buscar...">
