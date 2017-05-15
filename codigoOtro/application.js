@@ -8,14 +8,14 @@ var Application = {
             Application.initFilesListPage();
          }
       );
-      /*$(document).on(
+      $(document).on(
          'pageinit',
          '#aurelio-page',
          function()
          {
             Application.openLinksInApp();
          }
-      );*/
+      );
       $(document).on(
          'pagechange',
          function(event, properties)
@@ -72,13 +72,13 @@ var Application = {
          });
       }
    },
-   /*openLinksInApp: function()
+   openLinksInApp: function()
    {
       $("a[target=\"_blank\"]").on('click', function(event) {
          event.preventDefault();
          window.open($(this).attr('href'), '_target');
       });
-   },*/
+   },
    updateMediaList: function() {
       window.requestFileSystem(
          LocalFileSystem.PERSISTENT,

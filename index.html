@@ -11,16 +11,11 @@
  	<script src="js/jquery-1.12.4.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="vendor/jquery.mobile/jquery.mobile-1.4.5.min.js"></script>
-	<script src="cordova.js"></script>
-	<script src="js/appFile.js"></script>
-	<script src="js/application.js"></script>
-	<script src="js/utility.js"></script>
-	<script src="js/player.js"></script>
 	<script src="js/emusic.js"></script>
-	<script>
+	<!-- <script>
 		$(document).on('pagebeforecreate orientationchange', Application.updateIcons);
-		$(document).one('deviceready', Application.initApplication);
-	</script>
+		$(document).on('deviceready', Application.initApplication);
+	</script> -->
 </head>
 <body>
 
@@ -34,7 +29,7 @@
 	      		<div class="ui-grid-b">
 			    	<div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-btn-inline">NO</a></div>
 			    	<div class="ui-block-b"></div>
-			    	<div class="ui-block-c"><a href="#" class="ui-btn ui-btn-inline">SI</a></div>
+			    	<div class="ui-block-c"><a href="#" onclick="exitFromApp()"  class="ui-btn ui-btn-inline">SI</a></div>
 			    </div>
 	    	</div>
 		</header>
