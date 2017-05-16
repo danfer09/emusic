@@ -1,17 +1,76 @@
-var Emusic = {
-	salir: function exitFromApp()
-	{
-		navigator.app.exitApp();
-	},
-	crearBD: function(nombre, descripcion) {
-		var bd = openDatabase(name, '1.0', descripcion, 5 * 1024 * 1024);
+function exitFromApp()
+{
+	navigator.app.exitApp();
+}
 
-		return bd;
-	},
-	buscarAudio: function(myPath)
-	{
+//Pasar al reproductor.html el nombre de la canción seleccionada
+$(document).on( "pagecreate", "#files-list-page",  function( e ) {
+    $('#files-list li a').on('click', function(e) {
+        $(":mobile-pagecontainer").pagecontainer("change", "reproductor.html", {
+            data: {
+                titulo: this.text,
+            }
+        });
+    });
+});
 
-		window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024,
+$(document).on( "pagecreate", "#player-page", function( e ) {
+    var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
+    $("#media-name").text(titulo);
+
+    var my_media = new Media('android_asset/www/Los Piratas - Años 80.mp3',
+        // success callback
+        function () {
+        	console.log("playAudio():Audio Success");
+        },
+        // error callback
+        function (err) {
+        	console.log("playAudio():Audio Error: " + err);
+        }
+    );
+
+    // Pause after 10 seconds
+    /*setTimeout(function () {
+        my_media.pause();
+    }, 10000);*/
+
+    $('#player-play').on('click', function(e) {
+    	// Play audio
+    	my_media.play();
+    });
+});
+
+// /emusic/cordova/emusic/www/Los Piratas - Años 80.mp3
+
+function crearBD(nombre, descripcion) {
+	var bd = openDatabase(name, '1.0', descripcion, 5 * 1024 * 1024);
+
+	return bd;
+}
+function buscarAudio()
+{
+	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+		console.log('file sistem abierto: ' + dirEntry.name);
+
+		var para = document.createElement("P");
+		var v = document.createTextNode(dirEntry.name);
+		para.appendChild(v);
+		document.getElementById('files-list').appendChild(para);
+	}, onErrorLoadFs);
+}
+function refrescaAudio() {
+	var para = document.createElement("P");
+	var v = document.createTextNode("aaa");
+
+	para.appendChild(v);
+	document.getElementById('files-list').appendChild(para);
+
+	buscarAudio("/", true, 0);
+}
+
+
+/*
+window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024,
 			function(grantedBytes) {
 			  window.requestFileSystem(PERSISTENT, grantedBytes, onInitFs, errorHandler);
 			}, function(e) {
@@ -49,17 +108,7 @@ var Emusic = {
 		if (level === 0)
 			 $('#waiting-popup').popup('close');
 		console.log('Current path analized is: ' + path);
-	},
-	refrescaAudio: function() {
-		var para = document.createElement("P");
-		var v = document.createTextNode("aaa");
-
-		para.appendChild(v);
-		document.getElementById('files-list').appendChild(para);
-
-		Emusic.buscarAudio("/", true, 0);
-   },
-};
+*/
 
 /*
 function listPath(myPath){

@@ -11,20 +11,27 @@
 
 }
 
+div[data-role="panel"]{
+	background-color: #C0C0C0;
+}
+
 #panelOpciones{
 	background-color: #C0C0C0;
 }
 div[subrayado="true"]{
 	text-decoration: underline;
 }
-div[color="feliz"] div{
+div[color="feliz"]{
 	background-color:#FFD700;
 }
+div[color="feliz-barra"]{
+	background-color:#FF9933;
+}
 
-div[color="serio"] div{
+div[color="serio"]{
 	background-color:#FA8072;
 }
-div[color="triste"] div{
+div[color="triste"]{
 	background-color:#696969;
 }
 a#emociones{
@@ -80,4 +87,8 @@ a#emociones{
 }
 #player-play img:active {
 	opacity: 0.8;
+}
+
+#files-list li a {
+	white-space: pre;
 }
