@@ -9,18 +9,71 @@ $(document).on( "pagecreate", "#files-list-page",  function( e ) {
         $(":mobile-pagecontainer").pagecontainer("change", "reproductor.html", {
             data: {
                 titulo: this.text,
-            }
+            },
+            transition: "flip"
         });
     });
 });
+
+/*
+module.controller('MyCtrl', function($scope, $cordovaMedia) {
+
+  var src = "/src/audio.mp3";
+  var media = $cordovaMedia.newMedia(src);
+
+
+  var iOSPlayOptions = {
+    numberOfLoops: 2,
+    playAudioWhenScreenIsLocked : false
+  }
+
+  media.play(iOSPlayOptions); // iOS only!
+  media.play(); // Android
+
+  media.pause();
+
+  media.stop();
+
+  media.release();
+
+  media.seekTo(5000); // milliseconds value
+
+  media.setVolume(0.5);
+
+  media.startRecord();
+
+  media.stopRecord();
+
+  media.getDuration();
+
+  media.getCurrentPosition().then(...);
+});
+*/
 
 $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
     $("#media-name").text(titulo);
 
-    var my_media = new Media('android_asset/www/Los Piratas - Años 80.mp3',
+    playMusic();
+
+
+    // Pause after 10 seconds
+    /*setTimeout(function () {
+        my_media.pause();
+    }, 10000);*/
+
+
+});
+function playMusic() {
+	/*module.controller('MyCtrl', function($scope, $cordovaMedia) {
+		var src = "android_asset/www/Los Piratas - Años 80.mp3";
+			var media = $cordovaMedia.newMedia(src);
+			media.play();
+	});*/
+    var my_media = new Media('Los Piratas - Años 80.mp3',
         // success callback
         function () {
+        	$('#media-played').html("iniciado!")
         	console.log("playAudio():Audio Success");
         },
         // error callback
@@ -29,16 +82,11 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
         }
     );
 
-    // Pause after 10 seconds
-    /*setTimeout(function () {
-        my_media.pause();
-    }, 10000);*/
-
     $('#player-play').on('click', function(e) {
     	// Play audio
     	my_media.play();
     });
-});
+}
 
 // /emusic/cordova/emusic/www/Los Piratas - Años 80.mp3
 
