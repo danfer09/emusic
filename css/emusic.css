@@ -140,3 +140,11 @@ a#emociones{
 	height: 76px;
 	border-radius: 50%!important;
 }
+#elegir-emociones #cara-feliz:focus,
+#elegir-emociones #cara-seria:focus,
+#elegir-emociones #cara-triste:focus {
+	opacity: 0.8;
+	border: none!important;
+	box-shadow: none !important;
+	outline-style: none!important;
+}
