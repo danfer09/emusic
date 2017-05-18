@@ -23,7 +23,7 @@
 			<div id="player">
 				<div id="media-info">
 					<p>Canción: <span id="media-name"></span></p>
-					<img src="img/icono_musica.png" alt="Icono_musica_estandar" id=icono_musica></div>
+					<img src="img/icono_musica.png" alt="Icono_musica_estandar" id=icono_musica>
 					<!-- En el js aquí meteremos el fullpath para tenerlo a mano y porder reproducirlo -->
 					<p class="hidden">Ubicación: <span id="media-path"></span></p>
 					<div>
@@ -31,10 +31,23 @@
 						<input type="range" name="time-slider" id="time-slider" value="0" min="0" max="100" data-highlight="true" />
 					</div>
 				</div>
-				<a href="#" id="player-play" title="Play / Pause"><img src="img/play.png"></a>
-				<!--<a href="#" id="player-stop" title="Stop"></a>-->
 			</div>
 		</div>
+		<div class="ui-grid-b" id="elegir-emociones">
+			<div class="ui-block-a">
+				<a href="#" id="cara-feliz"><img src="img/happy_face.png"></a>
+			</div>
+			<div class="ui-block-b">
+				<a href="#" id="cara-seria"><img src="img/serious_face.jpg"></a>
+			</div>
+			<div class="ui-block-c">
+				<a href="#" id="cara-triste"><img src="img/sad_face.png"></a>
+			</div>
+		</div>
+		<footer id="reproductor-footer" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<a href="#" data-role="button" id="player-play" title="Play / Pause"></a>
+			<!--<a href="#" id="player-stop" title="Stop"></a>-->
+		</footer>
     </div>
 </body>
 </html>

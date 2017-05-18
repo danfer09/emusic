@@ -54,7 +54,7 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
     $("#media-name").text(titulo);
 
-    playMusic();
+    //playMusic();//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
 
 
     // Pause after 10 seconds

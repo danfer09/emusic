@@ -89,20 +89,54 @@ a#emociones{
 	text-align: center;
 }
 
-#player-play img {
-	width: 80px;
-	height: 80px;
-	margin-left: 40%;
-}
-#player-play img:active {
-	opacity: 0.8;
-}
-
 #files-list li a {
 	white-space: pre;
 }
 #icono_musica{
-	width: 200px;
-	height: 200px;
+	width: 300px;
+	height: 300px;
 	background-color:#B0C4DE;
+}
+
+#reproductor-footer {
+	text-align: center;
+	min-height: 100px;
+	background-color: lightgrey;
+}
+#reproductor-footer #player-play {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%!important;
+	background: url("../img/play.png") no-repeat;
+	background-size: 88px 88px;
+}
+
+#reproductor-footer #player-play:active,
+#reproductor-footer #player-play:focus {
+	opacity: 0.8;
+	border: none!important;
+	box-shadow: none !important;
+	outline-style: none!important;
+}
+
+#elegir-emociones {
+	height: 90px;
+	background-color: grey;
+	text-align: center;
+	vertical-align: middle;
+}
+#elegir-emociones #cara-feliz img {
+	width: 76px;
+	height: 76px;
+	border-radius: 50%!important;
+}
+#elegir-emociones #cara-seria img {
+	width: 76px;
+	height: 76px;
+	border-radius: 50%!important;
+}
+#elegir-emociones #cara-triste img {
+	width: 76px;
+	height: 76px;
+	border-radius: 50%!important;
 }
