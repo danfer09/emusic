@@ -2,6 +2,9 @@
   font-family:"Pacifico";
   src: url("../fonts/Pacifico-Regular.woff");
 }
+h1{
+	font-family:"Pacifico",cursive;
+}
 #header{
 	border-color: #000000;
 	background-color:#000000;
@@ -25,14 +28,19 @@ div[color="feliz"]{
 	background-color:#FFD700;
 }
 div[color="feliz-barra"]{
-	background-color:#FF9933;
+	background-color:#FFA500;
 }
-
 div[color="serio"]{
 	background-color:#FA8072;
 }
+div[color="serio-barra"]{
+	background-color:#FFA07A;
+}
 div[color="triste"]{
 	background-color:#696969;
+}
+div[color="triste-barra"]{
+	background-color:#A9A9A9;
 }
 a#emociones{
 	color:#000000;

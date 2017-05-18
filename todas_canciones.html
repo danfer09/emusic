@@ -16,9 +16,22 @@
    <body>
       <div id="files-list-page" data-role="page">
          <header data-role="header">
-            <a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
+            <!--<a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
             <h1>MI MÚSICA</h1>
             <a href="#" onclick="Emusic.buscarAudio()" id="update-button" data-icon="refresh" data-iconpos="notext" class="ui-mini">Refrescar</a>
+			-->
+
+            <div data-role="navbar">
+				<ul>
+					<li><a href="#" data-rel="back" class="ui-btn ui-icon-back ui-corner-all ui-btn-icon-top">Atrás</a></li>
+					<li><a href="feliz.html" class="ui-btn ui-icon-heart ui-corner-all ui-btn-icon-top">Emociones</a></li>
+	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
+		      		<li><a href="opciones.html" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
+		      		<li><a href="#" onclick="Emusic.buscarAudio()" id="update-button" class="ui-mini ui-icon-refresh ui-btn-icon-top">Refrescar</a></li>
+			    </ul>
+			</div>
+
+
          </header>
 
          <div data-role="content">
