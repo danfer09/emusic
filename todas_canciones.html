@@ -15,6 +15,30 @@
    </head>
    <body>
       <div id="files-list-page" data-role="page">
+         <div data-role="panel" id="panelOpciones">
+            <h2>Opciones</h2>
+            <form method="post" action="">
+               <fieldset data-role="controlgroup">
+                  <legend>Desea iniciar canción al subir el volumen</legend>
+                  <label for="boton_si">Si</label>
+                  <input type="radio" class="hidden" name="botones_volumen" id="boton_si" value="si">
+                  <label for="boton_no">No</label>
+                  <input type="radio" class="hidden" name="botones_volumen" id="boton_no" value="no">
+               </fieldset>
+
+               <fieldset data-role="controlgroup">
+                 <legend>Color de fondo en la pantalla de inicio</legend>
+                 <label for="boton_azul">Azul</label>
+                 <input type="radio" class="hidden" name="botones_color" id="boton_azul" value="azul">
+                 <label for="boton_morado">Morado</label>
+                 <input type="radio" class="hidden" name="botones_color" id="boton_morado" value="morado">
+                 <label for="boton_verde">Verde</label>
+                 <input type="radio" class="hidden" name="botones_color" id="boton_verde" value="verde">
+               </fieldset>
+
+               <input type="submit" data-inline="true" value="Submit">
+            </form>
+         </div>
          <header data-role="header">
             <!--<a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
             <h1>MI MÚSICA</h1>
@@ -26,7 +50,7 @@
 					<li><a href="#" data-rel="back" class="ui-btn ui-icon-back ui-corner-all ui-btn-icon-top">Atrás</a></li>
 					<li><a href="feliz.html" class="ui-btn ui-icon-heart ui-corner-all ui-btn-icon-top">Emociones</a></li>
 	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
-		      		<li><a href="opciones.html" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
+		      		<li><a href="#panelOpciones" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
 		      		<li><a href="#" onclick="Emusic.buscarAudio()" id="update-button" class="ui-mini ui-icon-refresh ui-btn-icon-top">Refrescar</a></li>
 			    </ul>
 			</div>

@@ -103,7 +103,7 @@ a#emociones{
 	min-height: 100px;
 	background-color: lightgrey;
 }
-#reproductor-footer #player-play {
+#reproductor-footer #player-play{
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
@@ -117,6 +117,20 @@ a#emociones{
 	border: none!important;
 	box-shadow: none !important;
 	outline-style: none!important;
+}
+#prev{
+	width: 90px;
+	height: 90px;
+	border-radius: 50%!important;
+	background: url("../img/prev.png") no-repeat;
+	background-size: 88px 88px;
+}
+#next{
+	width: 90px;
+	height: 90px;
+	border-radius: 50%!important;
+	background: url("../img/next.png") no-repeat;
+	background-size: 88px 88px;
 }
 
 #elegir-emociones {
