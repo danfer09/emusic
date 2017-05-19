@@ -2,7 +2,7 @@
   font-family:"Pacifico";
   src: url("../fonts/Pacifico-Regular.woff");
 }
-h1{
+h1 {
 	font-family:"Pacifico",cursive;
 }
 #header{
@@ -10,42 +10,42 @@ h1{
 	background-color:#000000;
 }
 
-#emociones{
+#emociones {
 
 }
 
-div[data-role="panel"]{
+div[data-role="panel"] {
 	background-color: #C0C0C0;
 }
 
-#panelOpciones{
+#panelOpciones {
 	background-color: #C0C0C0;
 }
-div[subrayado="true"]{
+div[subrayado="true"] {
 	text-decoration: underline;
 }
-div[color="feliz"]{
+div[color="feliz"] {
 	background-color:#FFD700;
 }
-div[color="feliz-barra"]{
+div[color="feliz-barra"] {
 	background-color:#FFA500;
 }
-div[color="serio"]{
+div[color="serio"] {
 	background-color:#FA8072;
 }
-div[color="serio-barra"]{
+div[color="serio-barra"] {
 	background-color:#FFA07A;
 }
-div[color="triste"]{
+div[color="triste"] {
 	background-color:#696969;
 }
-div[color="triste-barra"]{
+div[color="triste-barra"] {
 	background-color:#A9A9A9;
 }
-a#emociones{
+a#emociones {
 	color:#000000;
 }
-#feliz{
+#feliz {
 	font-family:"Pacifico",cursive;
 	width:33.333%;
 	border: 5px solid black;
@@ -53,7 +53,7 @@ a#emociones{
 	float:left;
 }
 
-#serio{
+#serio {
 	font-family:"Pacifico",cursive;
 	width:33.333%;
 	border: 5px solid black;
@@ -61,7 +61,7 @@ a#emociones{
 	float:left;
 }
 
-#triste{
+#triste {
 	font-family:"Pacifico",cursive;
 	width:33.333%;
 	border: 5px solid black;
@@ -69,7 +69,7 @@ a#emociones{
 	float:left;
 }
 
-#lista_canciones{
+#lista_canciones {
 	font-family:"Pacifico",cursive;
 	border: 5px solid black;
 	text-align: center;
@@ -92,18 +92,20 @@ a#emociones{
 #files-list li a {
 	white-space: pre;
 }
-#icono_musica{
-	width: 300px;
-	height: 300px;
+#icono_musica {
+	min-width: 200px;
+	max-width: 300px;
+	min-height: 200px;
+	max-height: 250px;
 	background-color:#B0C4DE;
 }
 
 #reproductor-footer {
 	text-align: center;
-	min-height: 100px;
+	height: 160px;
 	background-color: lightgrey;
 }
-#reproductor-footer #player-play{
+#reproductor-footer #player-play {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
@@ -118,14 +120,14 @@ a#emociones{
 	box-shadow: none !important;
 	outline-style: none!important;
 }
-#prev{
+#prev {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
 	background: url("../img/prev.png") no-repeat;
 	background-size: 88px 88px;
 }
-#next{
+#next {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
@@ -134,24 +136,24 @@ a#emociones{
 }
 
 #elegir-emociones {
-	height: 90px;
+	height: 60px;
 	background-color: grey;
 	text-align: center;
 	vertical-align: middle;
 }
 #elegir-emociones #cara-feliz img {
-	width: 76px;
-	height: 76px;
+	width: 60px;
+	height: 60px;
 	border-radius: 50%!important;
 }
 #elegir-emociones #cara-seria img {
-	width: 76px;
-	height: 76px;
+	width: 60px;
+	height: 60px;
 	border-radius: 50%!important;
 }
 #elegir-emociones #cara-triste img {
-	width: 76px;
-	height: 76px;
+	width: 60px;
+	height: 60px;
 	border-radius: 50%!important;
 }
 #elegir-emociones #cara-feliz:focus,
@@ -161,4 +163,65 @@ a#emociones{
 	border: none!important;
 	box-shadow: none !important;
 	outline-style: none!important;
+}
+
+@media only screen and (orientation: landscape) {
+    #reproductor-footer {
+		text-align: center;
+		height: 110px;
+		background-color: lightgrey;
+	}
+
+	#reproductor-footer #player-play {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%!important;
+		background: url("../img/play.png") no-repeat;
+		background-size: 58px 58px;
+	}
+
+	#prev {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%!important;
+		background: url("../img/prev.png") no-repeat;
+		background-size: 58px 58px;
+	}
+	#next {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%!important;
+		background: url("../img/next.png") no-repeat;
+		background-size: 58px 58px;
+	}
+
+	#elegir-emociones {
+		height: 40px;
+		background-color: grey;
+		text-align: center;
+		vertical-align: middle;
+	}
+	#elegir-emociones #cara-feliz img {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%!important;
+	}
+	#elegir-emociones #cara-seria img {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%!important;
+	}
+	#elegir-emociones #cara-triste img {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%!important;
+	}
+
+	#icono_musica {
+		min-width: 70px;
+		max-width: 70px;
+		min-height: 70px;
+		max-height: 70px;
+		background-color:#B0C4DE;
+	}
 }
