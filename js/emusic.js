@@ -56,12 +56,10 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
 
     //playMusic();//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
 
-
     // Pause after 10 seconds
     /*setTimeout(function () {
         my_media.pause();
     }, 10000);*/
-
 
 });
 function playMusic() {
@@ -95,7 +93,7 @@ function crearBD(nombre, descripcion) {
 
 	return bd;
 }
-function buscarAudio()
+/*function buscarAudio()
 {
 	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
 		console.log('file sistem abierto: ' + dirEntry.name);
@@ -105,7 +103,37 @@ function buscarAudio()
 		para.appendChild(v);
 		document.getElementById('files-list').appendChild(para);
 	}, onErrorLoadFs);
-}
+}*/
+var buscar = function (entry) {
+      // Obtengo el DirectoryEntry para 'cordova.file.applicationDirectory
+		  alert(entry.fullPath);//ACCEDE AL ROOOOOOT
+		  var reader = entry.createReader();
+                     // compruebo si existe un método readEntries -es el caso
+		  if (reader.readEntries) {alert("HAY readEntries");} else {alert("No hay readEntries");}
+		  reader.readEntries(function(entradas) {
+		  	for (var i = 0; i < entradas.length; i++) {
+		  		alert(entradas[i].isDirectory);
+		  		alert(entradas[i].fullPath);
+		  		buscar(entradas[i]);
+		  		//alert(entradas[i].name);
+		  	}
+		  }, function(){alert("Error al leer entradas");});
+};
+$(document).on( "pagecontainerchange",function(){
+	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
+	if(pageID == "files-list-page"){
+		/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+		function(fileSystem){ // success get file system
+			root = fileSystem.root;
+			buscar(root);
+		}, function(evt){ // error get file system
+			console.log("File System Error: "+evt.target.error.code);
+		});*/
+		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, buscar);//ACCEDE A LA CARPETA DE LA APLICACIÓN
+	}
+});
+
+
 function refrescaAudio() {
 	var para = document.createElement("P");
 	var v = document.createTextNode("aaa");
