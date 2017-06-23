@@ -104,18 +104,115 @@ function crearBD(nombre, descripcion) {
 		document.getElementById('files-list').appendChild(para);
 	}, onErrorLoadFs);
 }*/
-var buscar = function (entry) {
-	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
-	//ESCALO 3 HACIA ARRIBA Y LLEGO A / DEL DISPOSITIVO
-
+var getRootDir = function(entry) {
 	entry.getParent(function(padre){
 		padre.getParent(function(padre){
 			padre.getParent(function(padre){
-				alert(padre.fullPath+"hola");
-				var dirroot=padre;
+				buscardirectorio(padre);
 			});
 		});
 	});
+};
+
+function buscardirectorio (entry){
+	var reader = entry.createReader();
+
+	reader.readEntries(function(entradas) {
+		for (var i=0; i < entradas.length; i++) {
+			if(entradas[i].isDirectory){
+				//alert("Entradas: "+entradas.length+" "+entradas[i].fullPath);
+				buscardirectorio(entradas[i]);
+			}
+			if(entradas[i].isFile){
+				//alert(entradas[i].fullPath);
+				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));
+				if(extension === '.mp3'){
+					alert("es mp3 "+entradas[i].name);
+					guardarEnBD(entradas[i].name, entradas[i].fullPath);//Función no implementada aún
+				}
+			}
+		}
+	}, function(){alert("Error al leer entradas");});
+}
+
+function guardarEnBD(nombreCancion, direccionCancion){
+	alert(nombreCancion + " " + direccionCancion);
+	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
+
+    	fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {
+			fileEntry.name = nombreCancion;
+        	fileEntry.fullPath = direccionCancion;
+        	writeFile(fileEntry, null);
+
+    	}, onErrorCreateFile);
+	}, onErrorLoadFs);
+	/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+		alert(fs.construct.name);//Creo que imprime la dirección donde se va a crear el fichero
+		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
+			fileEntry.name = 'nombreCancion';
+			fileEntry.fullPath = 'direccionCancion';
+			writeFile(fileEntry, null);
+		}, onErrorCreateFile);
+	}, onErrorLoadFs);*/
+}
+function cargarBBDD() {
+	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
+
+    	fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {
+			readFile(fileEntry);
+    	}, onErrorCreateFile);
+	}, onErrorLoadFs);
+}
+function readFile(fileEntry) {
+
+    fileEntry.file(function (file) {
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            alert("Successful file read: " + this.result);
+            displayFileData(fileEntry.fullPath + ": " + this.result);
+        };
+
+        reader.readAsText(file);
+
+    }, onErrorReadFile);
+}
+
+$(document).on( "pagecontainerchange",function(){
+	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
+	if(pageID == "files-list-page"){
+		/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+		function(fileSystem){ // success get file system
+			root = fileSystem.root;
+			buscar(root);
+		}, function(evt){ // error get file system
+			console.log("File System Error: "+evt.target.error.code);
+		});*/
+		var permissions = cordova.plugins.permissions;
+		permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, successR, errorR);
+		function errorR() {
+		  alert("No tenemos permisos");
+		}
+		function successR( status ) {
+		  if( !status.hasPermission ) error();
+		}
+
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, successW, errorW);
+		function errorW() {
+		  alert("No tenemos permisos");
+		}
+		function successW( status ) {
+		  if( !status.hasPermission ) error();
+		}
+
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);//ACCEDE A LA CARPETA DE LA APLICACIÓN
+	}
+});
+
+/*var buscar = function (entry) {
+	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
+	//ESCALO 3 HACIA ARRIBA Y LLEGO A / DEL DISPOSITIVO
+	alert(dirroot);
 	// Obtengo el DirectoryEntry para 'cordova.file.externalApplicationStorageDirectory
 	var reader = dirroot.createReader();
 	         // compruebo si existe un método readEntries -es el caso
@@ -127,76 +224,15 @@ var buscar = function (entry) {
 			if(entradas[i].isDirectory)//Comprobamos si es un directorios
 				buscardirectorio(entradas[i]);//Si es un directorio se llama a la funcion recursiva buscardirectorio
 			if(entradas[i].isFile){//Comprobamos si es un fichero
-				extension = entries[i].name.substr(entries[i].name.lastIndexOf('.'));//Si es unb fichero comprobamos su terminación
+				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));//Si es unb fichero comprobamos su terminación
 				if(extension === '.mp3'){
-					guardarEnBD(entries[i].name,entries[i].fullPath);//llamamos a la función para que guarde el nombre y el path de la canción
+					alert("es mp3 "+entradas[i].name);
+					//guardarEnBD(entradas[i].name,entradas[i].fullPath);//llamamos a la función para que guarde el nombre y el path de la canción
 				}
 			}
-
 		}
-	}
-	//}, function(){alert("Error al leer entradas");});//ESTA LÍNEA ESTA BIEN???, NO ES ALGO RESIDUAL??
-};
-
-var buscardirectorio = function (entry){
-
-	var reader = entry.createReader();
-	reader.readEntries(function(entradas) {
-	for (var i = 0; i < entradas.length; i++) {
-		if(entradas[i].isDirectory)
-			buscardirectorio(entradas[i]);
-		if(entradas[i].isDirectory){
-			extension = entries[i].name.substr(entries[i].name.lastIndexOf('.'));
-			if(extension === '.mp3'){
-				guardarEnBD(entries[i].name, entries[i].fullPath);//Función no implementada aún
-			}
-		}
-
-	}
-	}
-}
-
-
-
-var guardarEnBD = function(nombreCancion, direccionCancion){
-
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, success, onErrorLoadFs);
-
-
-	var success = function (fs) {
-		alert(fs.fullPath);//Creo que imprime la dirección donde se va a crear el fichero
-		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
-			fileEntry.name == 'nombreCancion';
-			fileEntry.fullPath == 'direccionCancion';
-			writeFile(fileEntry, null);
-		}, onErrorCreateFile);
-
-	}
-}
-$(document).on( "pagecontainerchange",function(){
-	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
-	if(pageID == "files-list-page"){
-		/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-		function(fileSystem){ // success get file system
-			root = fileSystem.root;
-			buscar(root);
-		}, function(evt){ // error get file system
-			console.log("File System Error: "+evt.target.error.code);
-		});*/
-		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buscar);//ACCEDE A LA CARPETA DE LA APLICACIÓN
-	}
-});
-
-
-function refrescaAudio() {
-	var para = document.createElement("P");
-	var v = document.createTextNode("aaa");
-
-	para.appendChild(v);
-	document.getElementById('files-list').appendChild(para);
-
-	buscarAudio("/", true, 0);
-}
+	}, function(){alert("Error al leer entradas");});//ESTA LÍNEA ESTA BIEN???, NO ES ALGO RESIDUAL??
+};*/
 
 
 /*
