@@ -105,19 +105,27 @@ function crearBD(nombre, descripcion) {
 	}, onErrorLoadFs);
 }*/
 var buscar = function (entry) {
-      // Obtengo el DirectoryEntry para 'cordova.file.applicationDirectory
-		  alert(entry.fullPath);//ACCEDE AL ROOOOOOT
-		  var reader = entry.createReader();
-                     // compruebo si existe un método readEntries -es el caso
-		  if (reader.readEntries) {alert("HAY readEntries");} else {alert("No hay readEntries");}
-		  reader.readEntries(function(entradas) {
-		  	for (var i = 0; i < entradas.length; i++) {
-		  		alert(entradas[i].isDirectory);
-		  		alert(entradas[i].fullPath);
-		  		buscar(entradas[i]);
-		  		//alert(entradas[i].name);
-		  	}
-		  }, function(){alert("Error al leer entradas");});
+	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
+	//ESCALO 3 HACIA ARRIBA Y LLEGO A / DEL DISPOSITIVO
+	entry.getParent(function(padre){
+		padre.getParent(function(padre){
+			padre.getParent(function(padre){
+				alert(padre.fullPath+"hola");
+			});
+		});
+	});
+	// Obtengo el DirectoryEntry para 'cordova.file.externalApplicationStorageDirectory
+	var reader = entry.createReader();
+	         // compruebo si existe un método readEntries -es el caso
+	if (reader.readEntries) {alert("HAY readEntries");} else {alert("No hay readEntries");}
+	reader.readEntries(function(entradas) {
+		for (var i = 0; i < entradas.length; i++) {
+			alert(entradas[i].isDirectory);
+			alert(entradas[i].fullPath);
+			buscar(entradas[i]);
+			//alert(entradas[i].name);
+		}
+	}, function(){alert("Error al leer entradas");});
 };
 $(document).on( "pagecontainerchange",function(){
 	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
@@ -129,7 +137,7 @@ $(document).on( "pagecontainerchange",function(){
 		}, function(evt){ // error get file system
 			console.log("File System Error: "+evt.target.error.code);
 		});*/
-		window.resolveLocalFileSystemURL(cordova.file.dataDirectory, buscar);//ACCEDE A LA CARPETA DE LA APLICACIÓN
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, buscar);//ACCEDE A LA CARPETA DE LA APLICACIÓN
 	}
 });
 
