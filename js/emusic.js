@@ -107,26 +107,72 @@ function crearBD(nombre, descripcion) {
 var buscar = function (entry) {
 	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
 	//ESCALO 3 HACIA ARRIBA Y LLEGO A / DEL DISPOSITIVO
+
 	entry.getParent(function(padre){
 		padre.getParent(function(padre){
 			padre.getParent(function(padre){
 				alert(padre.fullPath+"hola");
+				var dirroot=padre;
 			});
 		});
 	});
 	// Obtengo el DirectoryEntry para 'cordova.file.externalApplicationStorageDirectory
-	var reader = entry.createReader();
+	var reader = dirroot.createReader();
 	         // compruebo si existe un método readEntries -es el caso
 	if (reader.readEntries) {alert("HAY readEntries");} else {alert("No hay readEntries");}
 	reader.readEntries(function(entradas) {
 		for (var i = 0; i < entradas.length; i++) {
 			alert(entradas[i].isDirectory);
 			alert(entradas[i].fullPath);
-			buscar(entradas[i]);
-			//alert(entradas[i].name);
+			if(entradas[i].isDirectory)//Comprobamos si es un directorios
+				buscardirectorio(entradas[i]);//Si es un directorio se llama a la funcion recursiva buscardirectorio
+			if(entradas[i].isFile){//Comprobamos si es un fichero
+				extension = entries[i].name.substr(entries[i].name.lastIndexOf('.'));//Si es unb fichero comprobamos su terminación
+				if(extension === '.mp3'){
+					guardarEnBD(entries[i].name,entries[i].fullPath);//llamamos a la función para que guarde el nombre y el path de la canción
+				}
+			}
+
 		}
-	}, function(){alert("Error al leer entradas");});
+	}
+	//}, function(){alert("Error al leer entradas");});//ESTA LÍNEA ESTA BIEN???, NO ES ALGO RESIDUAL??
 };
+
+var buscardirectorio = function (entry){
+
+	var reader = entry.createReader();
+	reader.readEntries(function(entradas) {
+	for (var i = 0; i < entradas.length; i++) {
+		if(entradas[i].isDirectory)
+			buscardirectorio(entradas[i]);
+		if(entradas[i].isDirectory){
+			extension = entries[i].name.substr(entries[i].name.lastIndexOf('.'));
+			if(extension === '.mp3'){
+				guardarEnBD(entries[i].name, entries[i].fullPath);//Función no implementada aún
+			}
+		}
+
+	}
+	}
+}
+
+
+
+var guardarEnBD = function(nombreCancion, direccionCancion){
+
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, success, onErrorLoadFs);
+
+
+	var success = function (fs) {
+		alert(fs.name);//Creo que imprime la dirección donde se va a crear el fichero
+		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
+			fileEntry.name == 'nombreCancion';
+			fileEntry.fullPath == 'direccionCancion';
+			writeFile(fileEntry, null);
+		}, onErrorCreateFile);
+
+	}
+}
 $(document).on( "pagecontainerchange",function(){
 	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
 	if(pageID == "files-list-page"){
