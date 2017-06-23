@@ -164,7 +164,7 @@ var guardarEnBD = function(nombreCancion, direccionCancion){
 
 
 	var success = function (fs) {
-		alert(fs.name);//Creo que imprime la dirección donde se va a crear el fichero
+		alert(fs.fullPath);//Creo que imprime la dirección donde se va a crear el fichero
 		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
 			fileEntry.name == 'nombreCancion';
 			fileEntry.fullPath == 'direccionCancion';
