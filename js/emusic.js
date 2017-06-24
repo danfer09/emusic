@@ -51,13 +51,20 @@ module.controller('MyCtrl', function($scope, $cordovaMedia) {
 });
 */
 var nombre;
+/*---------------------Añadido Sabadoo--------------*/
+var listaCanciones;
+/*--------------------------------------------------------*/
 $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
     nombre = titulo.split('=')[1];
-    $("#media-name").text(nombre);
+    $("#media-name").text(nombre);//¿¿¿¿HACER EN EL SETINTERVAL PARA CUANDO SE PASE DE CANCIÓN SE ACTUALICE EL NOMBRE?????
 
-    hacerSelectCancion(nombre, iniciarAudio);//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
+    hacerSelectCancion(nombre, iniciarAudio);
 
+    /*---------------------Añadido Sabadoo--------------*/
+    listaDeCanciones(nombre);//Carga la lista de canciones en una variable global para ser usada cuando se quiera pasar de canción
+
+    /*--------------------------------------------------------*/
     // Pause after 10 seconds
     /*setTimeout(function () {
         my_media.pause();
@@ -66,15 +73,15 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
 });
 
 window.setInterval(function(){
-    	if(my_media){
-    		$('#media-duration').html("<span>"+my_media.getDuration()+"</span>");
-    		var pos;
-    		my_media.getCurrentPosition(function(position){
-    			pos=position;
-    		})
-    		$('#media-played').html("<span>"+pos+"</span>");
-    	}
-    }, 1000);
+	if(my_media){
+		$('#media-duration').html("<span>"+Math.round(((my_media.getDuration())/60)*100)/100+"</span>");//Durancion en minutos redondeada a dos decimales
+		var pos;
+		my_media.getCurrentPosition(function(position){
+			pos=position;
+		})
+		$('#media-played').html("<span>"+pos+"</span>");
+	}
+}, 1000);
 
 var my_media;
 var status;
@@ -266,6 +273,204 @@ $(document).on( "pagecontainerchange",function(){
 		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);//ACCEDE A LA CARPETA DE LA APLICACIÓN
 	}
 });
+
+/*---------------------------------Funciones realizadas el sabado por la noche------------------------------------------------------------------------------*/
+/*----------------------------Cambiar siguiente o anterior canción-------------------------------------------*/
+
+
+/*function listaDeCanciones(nombre,callback){//Se puede llamar desde una funcion, y esta que sea llamada desde onclick del boton siguiente(como hicimos con el play/pause), lo malo es que cada vez que se quiera pasar de canción se tiene que cargar la lista entera de canciones, por eso la descarte
+	db.transaction(function(tx){
+		tx.executeSql('SELECT * FROM TODAS_MUSICA ORDER BY nombre', [], function(tx, rs){
+
+		    for(var i=0; i<rs.rows.length; i++) {
+		    	var row = rs.rows.item(i);
+		        var result[i] = {nombre: row['nombre'], fullPath: row['path']};
+			}
+			callback(nombre,result);
+		}, null);
+
+	});
+
+}*/
+
+
+function listaDeCanciones(nombre){//Casi igual a hacerSelect(), para usar hacerSelect tenia que sacar el array fuera y no quería tocarlo, en caso de que se pueda sacar, sacarlo y usar hacerSelect en vez de esta función
+	db.transaction(function(tx){
+		tx.executeSql('SELECT * FROM TODAS_MUSICA ORDER BY nombre', [], function(tx, rs){
+
+		    for(var i=0; i<rs.rows.length; i++) {
+		    	var row = rs.rows.item(i);
+		        listaCanciones[i] = {nombre: row['nombre'], fullPath: row['path']};
+			}
+
+		}, null);
+
+	});
+
+}*
+function pasarCancion(siguienteAnterior){//0-> siguiente, 1-> anterior Se llama desde los onclick de los botones prev y next del reporductor
+	if(siguienteAnterior==0){
+		siguienteCancion(nombre,listaCanciones);
+	}
+	else if(siguienteAnterior==1){
+		anteriorCancion(nombre,listaCanciones);
+	}
+}
+function siguienteCancion(nombre,listaCanciones){
+	for(var i=0; i<listaCanciones.length;i++){
+		if(listaCanciones[i].nombre==nombre){
+			callback(playAudio(listaCanciones[i+1].url));//Reproduce la siguiente canción de la lista, la lista esta ordenada alfabeticamente
+		}
+	}
+
+}
+function anteriorCancion(nombre,listaCanciones){
+	for(var i=0; i<listaCanciones.length;i++){
+		if(listaCanciones[i].nombre==nombre){
+			callback(playAudio(listaCanciones[i-1].url));//Reproduce la anterior canción de la lista, la lista esta ordenada alfabeticamente
+		}
+	}
+}
+/*---------------------------Insertar canción a lista de reproducción de emociones---------------------------------*/
+
+function DistinguirEmocion(emocion){//0->Feliz, 1->Triste, 2->Serio
+	if(emocion==0){
+		AñadirCancionEmocion(nombre,AñadirFeliz);
+	}
+	else if(emocion==1){
+		AñadirCancionEmocion(nombre,AñadirTriste);
+	}
+	else if(emocion==2){
+		AñadirCancionEmocion(nombre,AñadirSerio);
+	}
+}
+
+function AñadirCancionEmocion(nombre,callback){//Funcion que busca el path de la canción y llama a la función de añadir canción de la emoción que nos indiquen
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT path FROM TODAS_MUSICA WHERE nombre=?', [nombre], function(tx, rs){
+			callback(nombre, rs.rows.item(0)['path']);
+		}, null);
+	});
+}
+
+var AñadirFeliz=function (nombre,path){
+	db.transaction(insertarCancion, errorCB, successCB);
+
+	function insertarCancion(tx) {
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS FELIZ (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
+		tx.executeSql('INSERT INTO FELIZ (nombre, path) VALUES (?, ?)', [nombre, path]);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+}
+
+var AñadirTriste=function (nombre,path){
+	db.transaction(insertarCancion, errorCB, successCB);
+
+	function insertarCancion(tx) {
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS TRISTE (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
+		tx.executeSql('INSERT INTO TRISTE (nombre, path) VALUES (?, ?)', [nombre, path]);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+}
+
+var AñadirSerio=function (nombre,path){
+	db.transaction(insertarCancion, errorCB, successCB);
+
+	function insertarCancion(tx) {
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS SERIO (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
+		tx.executeSql('INSERT INTO SERIO (nombre, path) VALUES (?, ?)', [nombre, path]);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+}
+
+/*--------------------------Mostrar canciones del sentimiento---------------------------------------------*/
+//No se muy bien como llamarlas, pues no comprendo como hemos llamado a guardarEndb para que se carge cuando esta en todas_canciones.html
+function cargarListaFeliz(){
+	db.transaction(cargarLista, errorCB, successCB);
+	function cargarLista(tx) {
+
+		tx.executeSql('SELECT * FROM FELIZ', [], function(tx, rs){
+
+		    for(var i=0; i<rs.rows.length; i++) {
+				$(function() {
+					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
+					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
+					//Aunque le pasemos en href 'reproductor', pues cuando vaya a reproducir no mirar de donde viene sino el parametro que se le pase
+				});
+			}
+		  }, null);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+
+}
+
+function cargarListaTriste(){
+	db.transaction(cargarLista, errorCB, successCB);
+	function cargarLista(tx) {
+
+		tx.executeSql('SELECT * FROM TRISTE', [], function(tx, rs){
+
+		    for(var i=0; i<rs.rows.length; i++) {
+				$(function() {
+					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
+					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
+					//Aunque le pasemos en href 'reproductor', pues cuando vaya a reproducir no mirar de donde viene sino el parametro que se le pase
+				});
+			}
+		  }, null);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+
+}
+
+function cargarListaSerio(){
+	db.transaction(cargarLista, errorCB, successCB);
+	function cargarLista(tx) {
+
+		tx.executeSql('SELECT * FROM SERIO', [], function(tx, rs){
+
+		    for(var i=0; i<rs.rows.length; i++) {
+				$(function() {
+					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
+					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
+					//Aunque le pasemos en href 'reproductor', pues cuando vaya a reproducir no mirar de donde viene sino el parametro que se le pase
+				});
+			}
+		  }, null);
+	}
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
+
+}
 
 /*
 function readFile(fileEntry) {
