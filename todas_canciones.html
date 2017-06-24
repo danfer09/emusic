@@ -43,29 +43,30 @@
             <!--<a href="#" data-icon="back" data-iconpos="notext" data-rel="back" class="ui-mini" title="Go back">Atrás</a>
             <h1>MI MÚSICA</h1>
             <a href="#" onclick="Emusic.buscarAudio()" id="update-button" data-icon="refresh" data-iconpos="notext" class="ui-mini">Refrescar</a>
-			-->
+      -->
 
             <div data-role="navbar">
-				<ul>
-					<li><a href="#" data-rel="back" class="ui-btn ui-icon-back ui-corner-all ui-btn-icon-top">Atrás</a></li>
-					<li><a href="feliz.html" class="ui-btn ui-icon-heart ui-corner-all ui-btn-icon-top">Emociones</a></li>
-	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
-		      		<li><a href="#panelOpciones" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
-		      		<li><a href="#" onclick="onDeviceReady()" id="update-button" class="ui-mini ui-icon-refresh ui-btn-icon-top">Refrescar</a></li>
-			    </ul>
-			</div>
+        <ul>
+          <li><a href="#" data-rel="back" class="ui-btn ui-icon-back ui-corner-all ui-btn-icon-top">Atrás</a></li>
+          <li><a href="feliz.html" class="ui-btn ui-icon-heart ui-corner-all ui-btn-icon-top">Emociones</a></li>
+            <li><a href="index.html" class="ui-btn  ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
+              <li><a href="#panelOpciones" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
+              <li><a href="#" onclick="refrescarCanciones()" id="update-button" class="ui-mini ui-icon-refresh ui-btn-icon-top">Refrescar</a></li>
+          </ul>
+      </div>
 
 
          </header>
 
          <div data-role="content">
             <ul id="files-list" data-role="listview" data-autodividers="true" data-filter="true" data-split-icon="delete" data-filter-placeholder="Buscar...">
-               <li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
+               <!--<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>-->
             </ul>
          </div>
 
          <footer data-role="footer" data-position="fixed" data-tap-toggle="false">
             <h3 id="copyright">Creado por Daniel F. y Samuel G.</h3>
+            <button onclick="hacerSelect()" >C</button>
             <a id="credits-button" href="info.html" data-icon="info" data-iconpos="notext" class="ui-btn-right">Más información</a>
          </footer>
          <div id="waiting-popup" data-role="popup" data-position-to="window" data-dismissible="false">

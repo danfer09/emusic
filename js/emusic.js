@@ -4,8 +4,9 @@ function exitFromApp()
 }
 
 //Pasar al reproductor.html el nombre de la canción seleccionada
-$(document).on( "pagecreate", "#files-list-page",  function( e ) {
+/*$(document).on( "getActivePage", "#files-list-page",  function( e ) {
     $('#files-list li a').on('click', function(e) {
+    	alert("click");
         $(":mobile-pagecontainer").pagecontainer("change", "reproductor.html", {
             data: {
                 titulo: this.text,
@@ -13,7 +14,7 @@ $(document).on( "pagecreate", "#files-list-page",  function( e ) {
             transition: "flip"
         });
     });
-});
+});*/
 
 /*
 module.controller('MyCtrl', function($scope, $cordovaMedia) {
@@ -52,7 +53,8 @@ module.controller('MyCtrl', function($scope, $cordovaMedia) {
 
 $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
-    $("#media-name").text(titulo);
+    var nombre = titulo.split('=')[1];
+    $("#media-name").text(nombre);
 
     //playMusic();//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
 
@@ -88,11 +90,10 @@ function playMusic() {
 
 // /emusic/cordova/emusic/www/Los Piratas - Años 80.mp3
 
-function crearBD(nombre, descripcion) {
-	var bd = openDatabase(name, '1.0', descripcion, 5 * 1024 * 1024);
-
-	return bd;
+function refrescarCanciones() {
+	$(":mobile-pagecontainer").pagecontainer("change", "todas_canciones.html", {transition: "pop"});
 }
+
 /*function buscarAudio()
 {
 	window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
@@ -108,22 +109,45 @@ var getRootDir = function(entry) {
 	entry.getParent(function(padre){
 		padre.getParent(function(padre){
 			padre.getParent(function(padre){
-				buscardirectorio(padre);
+				buscarcanciones(padre);
 			});
 		});
 	});
 };
 
-function buscardirectorio (entry){
-	var reader = entry.createReader();
 
+function hacerSelect() {
+	var result = [];
+	db.transaction(function (tx) {
+	  	tx.executeSql('SELECT * FROM TODAS_MUSICA', [], function(tx, rs){
+
+	    for(var i=0; i<rs.rows.length; i++) {
+	    	var row = rs.rows.item(i);
+	        result[i] = {nombre: row['nombre'], fullPath: row['path']};
+
+			alert(result[i].nombre + " " + result[i].fullPath);
+		}
+	  }, null);
+	});
+}
+
+var todoRecorrido = 0;
+function buscarcanciones(entry) {
+	buscardirectorio(entry, 0);
+}
+
+var ok = 0;
+function buscardirectorio (entry, nivel){
+	var reader = entry.createReader();
 	reader.readEntries(function(entradas) {
-		for (var i=0; i < entradas.length; i++) {
+		var i = 0;
+		for (i=0; i < entradas.length; i++) {
+			//alert("nivel "+nivel+" "+entradas[i].fullPath);
 			if(entradas[i].isDirectory){
-				//alert("Entradas: "+entradas.length+" "+entradas[i].fullPath);
-				buscardirectorio(entradas[i]);
+				nivelAux = nivel+1;
+				buscardirectorio(entradas[i], nivelAux);
 			}
-			if(entradas[i].isFile){
+			else if(entradas[i].isFile){
 				//alert(entradas[i].fullPath);
 				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));
 				if(extension === '.mp3'){
@@ -135,17 +159,31 @@ function buscardirectorio (entry){
 	}, function(){alert("Error al leer entradas");});
 }
 
+var db;
 function guardarEnBD(nombreCancion, direccionCancion){
 	alert(nombreCancion + " " + direccionCancion);
-	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
+	db = window.openDatabase("emusic", "1.0", "Cordova Demo", 200000);
+	db.transaction(insertarCancion, errorCB, successCB);
 
-    	fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {
-			fileEntry.name = nombreCancion;
-        	fileEntry.fullPath = direccionCancion;
-        	writeFile(fileEntry, null);
+	function insertarCancion(tx) {
+		tx.executeSql('DROP TABLE IF EXISTS TODAS_MUSICA');
+	    tx.executeSql('CREATE TABLE IF NOT EXISTS TODAS_MUSICA (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
+		tx.executeSql('INSERT INTO TODAS_MUSICA (nombre, path) VALUES (?, ?)', [nombreCancion, direccionCancion]);
+		alert("hace las queries");
+		$(function() {
+			//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
+			$("#files-list").append('<li><a href="reproductor.html?nombre='+nombreCancion+'" data-transition="flip" data-role="button">'+nombreCancion+'</a></li>').listview('refresh');
+		});
+	}
 
-    	}, onErrorCreateFile);
-	}, onErrorLoadFs);
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+
+	function successCB() {
+	    alert("success!");
+	}
+
 	/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
 		alert(fs.construct.name);//Creo que imprime la dirección donde se va a crear el fichero
 		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
@@ -157,7 +195,6 @@ function guardarEnBD(nombreCancion, direccionCancion){
 }
 function cargarBBDD() {
 	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
-
     	fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {
 			readFile(fileEntry);
     	}, onErrorCreateFile);
@@ -181,13 +218,6 @@ function readFile(fileEntry) {
 $(document).on( "pagecontainerchange",function(){
 	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
 	if(pageID == "files-list-page"){
-		/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-		function(fileSystem){ // success get file system
-			root = fileSystem.root;
-			buscar(root);
-		}, function(evt){ // error get file system
-			console.log("File System Error: "+evt.target.error.code);
-		});*/
 		var permissions = cordova.plugins.permissions;
 		permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, successR, errorR);
 		function errorR() {
@@ -247,7 +277,7 @@ window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024,
 			var lector = fileSystem.createReader();
 			lector.readEntries(
 				function (entries) {
-					var bd = Emusic.crearBD('emusic', 'Base de datos Emusic');
+					var bd = Emusic.crearBD('emusic', "1.0", 'Base de datos Emusic', 200000);
 					bd.transaction(function (tx) {
 					   tx.executeSql('CREATE TABLE IF NOT EXISTS TODAS_MUSICA (id int NOT NULL AUTO_INCREMENT, nombre varchar(30), path varchar(255), PRIMARY KEY (id))');
 					});
