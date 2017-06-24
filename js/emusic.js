@@ -50,13 +50,13 @@ module.controller('MyCtrl', function($scope, $cordovaMedia) {
   media.getCurrentPosition().then(...);
 });
 */
-
+var nombre;
 $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace( /.*titulo=/, "" ).replace(new RegExp("\\+","g"),' ');
-    var nombre = titulo.split('=')[1];
+    nombre = titulo.split('=')[1];
     $("#media-name").text(nombre);
 
-    //playMusic();//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
+    hacerSelectCancion(nombre, iniciarAudio);//ESTO LLAMA A UNA FUNCIÓN PARA REPRODUCIR LA CANCIÓN EN TEORÍA
 
     // Pause after 10 seconds
     /*setTimeout(function () {
@@ -64,12 +64,61 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
     }, 10000);*/
 
 });
-function playMusic() {
-	/*module.controller('MyCtrl', function($scope, $cordovaMedia) {
+
+window.setInterval(function(){
+    	if(my_media){
+    		$('#media-duration').html("<span>"+my_media.getDuration()+"</span>");
+    		var pos;
+    		my_media.getCurrentPosition(function(position){
+    			pos=position;
+    		})
+    		$('#media-played').html("<span>"+pos+"</span>");
+    	}
+    }, 1000);
+
+var my_media;
+var status;
+
+function play() {
+	playMusic(nombre);
+}
+function playMusic(nombre) {
+	if (status == 2) {//está reproduciendo
+		hacerSelectCancion(nombre, pausaAudio);
+	} else if (status == 3 || status == 4) {//está en pausa
+		hacerSelectCancion(nombre, playAudio);
+	}
+}
+var iniciarAudio = function(url) {
+    // Play the audio file at url
+    my_media = new Media(url,
+        // success callback
+        function () { alert("playAudio():Audio Success"); },
+        // error callback
+        function (err) { alert("playAudio():Audio Error: " + err); },
+        function(mediaStatus) {
+        	status = mediaStatus;
+        }
+    );
+
+
+    // Play audio
+    my_media.play();
+}
+var playAudio = function(url) {
+    // Play audio
+    my_media.play();
+}
+var pausaAudio = function(url) {
+	my_media.pause();
+}
+
+/*function playMusic() {
+	module.controller('MyCtrl', function($scope, $cordovaMedia) {
 		var src = "android_asset/www/Los Piratas - Años 80.mp3";
 			var media = $cordovaMedia.newMedia(src);
 			media.play();
-	});*/
+	});
     var my_media = new Media('Los Piratas - Años 80.mp3',
         // success callback
         function () {
@@ -86,7 +135,7 @@ function playMusic() {
     	// Play audio
     	my_media.play();
     });
-}
+}*/
 
 // /emusic/cordova/emusic/www/Los Piratas - Años 80.mp3
 
@@ -115,6 +164,13 @@ var getRootDir = function(entry) {
 	});
 };
 
+function hacerSelectCancion(nombre, callback) {
+	db.transaction(function (tx) {
+	  	tx.executeSql('SELECT path FROM TODAS_MUSICA WHERE nombre=?', [nombre], function(tx, rs){
+		callback(rs.rows.item(0)['path']);
+	  }, null);
+	});
+}
 
 function hacerSelect() {
 	var result = [];
@@ -142,16 +198,13 @@ function buscardirectorio (entry, nivel){
 	reader.readEntries(function(entradas) {
 		var i = 0;
 		for (i=0; i < entradas.length; i++) {
-			//alert("nivel "+nivel+" "+entradas[i].fullPath);
 			if(entradas[i].isDirectory){
 				nivelAux = nivel+1;
 				buscardirectorio(entradas[i], nivelAux);
 			}
 			else if(entradas[i].isFile){
-				//alert(entradas[i].fullPath);
 				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));
 				if(extension === '.mp3'){
-					alert("es mp3 "+entradas[i].name);
 					guardarEnBD(entradas[i].name, entradas[i].fullPath);//Función no implementada aún
 				}
 			}
@@ -161,7 +214,6 @@ function buscardirectorio (entry, nivel){
 
 var db;
 function guardarEnBD(nombreCancion, direccionCancion){
-	alert(nombreCancion + " " + direccionCancion);
 	db = window.openDatabase("emusic", "1.0", "Cordova Demo", 200000);
 	db.transaction(insertarCancion, errorCB, successCB);
 
@@ -169,7 +221,6 @@ function guardarEnBD(nombreCancion, direccionCancion){
 		tx.executeSql('DROP TABLE IF EXISTS TODAS_MUSICA');
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS TODAS_MUSICA (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
 		tx.executeSql('INSERT INTO TODAS_MUSICA (nombre, path) VALUES (?, ?)', [nombreCancion, direccionCancion]);
-		alert("hace las queries");
 		$(function() {
 			//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
 			$("#files-list").append('<li><a href="reproductor.html?nombre='+nombreCancion+'" data-transition="flip" data-role="button">'+nombreCancion+'</a></li>').listview('refresh');
@@ -181,17 +232,8 @@ function guardarEnBD(nombreCancion, direccionCancion){
 	}
 
 	function successCB() {
-	    alert("success!");
+	    //alert("success!");
 	}
-
-	/*window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
-		alert(fs.construct.name);//Creo que imprime la dirección donde se va a crear el fichero
-		fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {//con las flags como estan, si no existe en fichero lo crea y si existe accede
-			fileEntry.name = 'nombreCancion';
-			fileEntry.fullPath = 'direccionCancion';
-			writeFile(fileEntry, null);
-		}, onErrorCreateFile);
-	}, onErrorLoadFs);*/
 }
 function cargarBBDD() {
 	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
@@ -199,20 +241,6 @@ function cargarBBDD() {
 			readFile(fileEntry);
     	}, onErrorCreateFile);
 	}, onErrorLoadFs);
-}
-function readFile(fileEntry) {
-
-    fileEntry.file(function (file) {
-        var reader = new FileReader();
-
-        reader.onloadend = function() {
-            alert("Successful file read: " + this.result);
-            displayFileData(fileEntry.fullPath + ": " + this.result);
-        };
-
-        reader.readAsText(file);
-
-    }, onErrorReadFile);
 }
 
 $(document).on( "pagecontainerchange",function(){
@@ -238,6 +266,22 @@ $(document).on( "pagecontainerchange",function(){
 		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);//ACCEDE A LA CARPETA DE LA APLICACIÓN
 	}
 });
+
+/*
+function readFile(fileEntry) {
+
+    fileEntry.file(function (file) {
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            alert("Successful file read: " + this.result);
+            displayFileData(fileEntry.fullPath + ": " + this.result);
+        };
+
+        reader.readAsText(file);
+
+    }, onErrorReadFile);
+}*/
 
 /*var buscar = function (entry) {
 	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
