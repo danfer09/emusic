@@ -58,6 +58,8 @@ $('#waiting-popup').popup('close');*/
 
 var nombre;
 var listaCanciones = [];
+/*dondeEstamos=> 0->Todas, 1->Feliz, 2->Triste, 3->Serio*/
+var dondeEstamos=0;
 
 $(document).on( "pagecreate", "#player-page", function( e ) {
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace(new RegExp("\\+","g"),' ');
@@ -167,6 +169,10 @@ var getRootDir = function(entry) {
 	});
 };
 
+var getRootDirSD = function(entry) {
+	buscarcanciones(entry);
+}
+
 function hacerSelectCancion(nombre, callback) {
 	db.transaction(function (tx) {
 	  	tx.executeSql('SELECT path FROM TODAS_MUSICA WHERE nombre=?', [nombre], function(tx, rs){
@@ -179,7 +185,7 @@ function hacerSelectCancion(nombre, callback) {
 function hacerSelect() {
 	var result = [];
 	db.transaction(function (tx) {
-	  	tx.executeSql('SELECT * FROM FELIZ', [], function(tx, rs){
+	  	tx.executeSql('SELECT * FROM SERIO', [], function(tx, rs){
 
 	    for(var i=0; i<rs.rows.length; i++) {
 	    	var row = rs.rows.item(i);
@@ -187,8 +193,14 @@ function hacerSelect() {
 
 			alert(result[i].nombre + " " + result[i].fullPath);
 		}
-	  }, null);
+	  }, successCB, errorCB);
 	});
+	function errorCB(err) {
+	    alert("Error processing SQL: "+err.code);
+	}
+	function successCB() {
+	    //alert("success!");
+	}
 }
 
 var todoRecorrido = 0;
@@ -236,7 +248,7 @@ function guardarEnBD(nombreCancion, direccionCancion){
 	}
 
 	function errorCB(err) {
-	    alert("Error processing SQL: "+err.code);
+	    alert("Error processing A SQL: "+err.code);
 	}
 
 	function successCB() {
@@ -256,6 +268,7 @@ var estamosPrimeraCarga = true;
 $(document).on( "pagecontainerchange",function(){
 	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
 	if(pageID == "files-list-page"){
+		dondeEstamos=0;
 		if (estamosPrimeraCarga) {
 			borrarTablaMusica = true;
 			var permissions = cordova.plugins.permissions;
@@ -276,6 +289,7 @@ $(document).on( "pagecontainerchange",function(){
 			}
 
 			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);//ACCEDE A LA CARPETA DE LA APLICACIÓN
+			//window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, getRootDirSD);
 		} else {
 			$(function() {
 				for (var i = 0; i < listaCanciones.length; i++) {
@@ -285,13 +299,16 @@ $(document).on( "pagecontainerchange",function(){
 		}
 	}
 	else if(pageID == "page_feliz"){
+		dondeEstamos=1;
 		cargarListaFeliz();
 	}
 	else if(pageID == "page_serio"){
+		dondeEstamos=3;
 		cargarListaSerio();
 	}
 	else if(pageID == "page_triste"){
-		cargarListaSerio();
+		dondeEstamos=2;
+		cargarListaTriste();
 	}
 });
 
@@ -339,11 +356,23 @@ function pasarCancion(siguienteAnterior){//0-> siguiente, 1-> anterior Se llama 
 function siguienteCancion(){
 	var encontrada = false;
 	var i=0;
-	while (!encontrada && i<listaCanciones.length) {
-		if(listaCanciones[i].nombre==nombre){
+	var listaAUsar = [];
+	if (dondeEstamos == 0) {
+		listaAUsar = listaCanciones;
+	} else if (dondeEstamos == 1) {
+		listaAUsar = listaFeliz;
+	} else if (dondeEstamos == 2) {
+		listaAUsar = listaTriste;
+	} else if (dondeEstamos == 3) {
+		listaAUsar = listaSerio;
+	} else {
+		alert("Lista no disponible");
+	}
+	while (!encontrada && i<listaAUsar.length) {
+		if(listaAUsar[i].nombre==nombre){
 			encontrada = true;
-			nombre = listaCanciones[(i+1)%listaCanciones.length].nombre;
-			iniciarAudio(listaCanciones[(i+1)%listaCanciones.length].fullPath);//Reproduce la siguiente canción de la lista, la lista esta ordenada alfabeticamente
+			nombre = listaAUsar[(i+1)%listaAUsar.length].nombre;
+			iniciarAudio(listaAUsar[(i+1)%listaAUsar.length].fullPath);//Reproduce la siguiente canción de la lista, la lista esta ordenada alfabeticamente
 		}
 		i++;
 	}
@@ -431,17 +460,23 @@ var anadirSerio=function (nombre,path){
 }
 
 /*--------------------------Mostrar canciones del sentimiento---------------------------------------------*/
+var listaFeliz = [];
+var listaTriste = [];
+var listaSerio = [];
 
 function cargarListaFeliz(){
-	db.transaction(cargarLista, errorCB, successCB);
-	function cargarLista(tx) {
+	db.transaction(cargarListaF, errorCB, successCB);
+	function cargarListaF(tx) {
 
 		tx.executeSql('SELECT * FROM FELIZ', [], function(tx, rs){
 
 		    for(var i=0; i<rs.rows.length; i++) {
+		    	var row = rs.rows.item(i);
+		    	nombreCancion = row['nombre'];
+		    	listaFeliz[i] = {nombre: nombreCancion, fullPath: row['path']};
 				$(function() {
 					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
-					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
+					$("#files-list").append('<li><a href="reproductor.html?nombre='+nombreCancion+'" data-transition="flip" data-role="button">'+nombreCancion+'</a></li>').listview('refresh');
 					//Aunque le pasemos en href 'reproductor', pues cuando vaya a reproducir no mirar de donde viene sino el parametro que se le pase
 				});
 			}
@@ -454,14 +489,16 @@ function cargarListaFeliz(){
 	    //alert("success!");
 	}
 }
-/*
+
 function cargarListaTriste(){
-	db.transaction(cargarLista, errorCB, successCB);
-	function cargarLista(tx) {
+	db.transaction(cargarListaT, errorCB, successCB);
+	function cargarListaT(tx) {
 
 		tx.executeSql('SELECT * FROM TRISTE', [], function(tx, rs){
 
 		    for(var i=0; i<rs.rows.length; i++) {
+		    	var row = rs.rows.item(i);
+		    	listaTriste[i] = {nombre: row['nombre'], fullPath: row['path']};
 				$(function() {
 					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
 					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
@@ -480,12 +517,14 @@ function cargarListaTriste(){
 }
 
 function cargarListaSerio(){
-	db.transaction(cargarLista, errorCB, successCB);
-	function cargarLista(tx) {
+	db.transaction(cargarListaS, errorCB, successCB);
+	function cargarListaS(tx) {
 
 		tx.executeSql('SELECT * FROM SERIO', [], function(tx, rs){
 
 		    for(var i=0; i<rs.rows.length; i++) {
+		    	var row = rs.rows.item(i);
+		    	listaSerio[i] = {nombre: row['nombre'], fullPath: row['path']};
 				$(function() {
 					//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
 					$("#files-list").append('<li><a href="reproductor.html?nombre='+rs.rows.item(i)['nombre']+'" data-transition="flip" data-role="button">'+rs.rows.item(i)['nombre']+'</a></li>').listview('refresh');
@@ -501,7 +540,7 @@ function cargarListaSerio(){
 	    //alert("success!");
 	}
 
-}*/
+}
 /*------------------------------------------------------------------------------------*/
 /*
 function readFile(fileEntry) {
