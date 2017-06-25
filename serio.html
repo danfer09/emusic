@@ -14,7 +14,7 @@
 	<script src="js/emusic.js"></script>
 </head>
 <body>
-	<div data-role="page" id="page_feliz">
+	<div data-role="page" id="page_serio">
 
 		<div data-role="panel" id="panelOpciones">
 		    <h2>Opciones</h2>
@@ -62,12 +62,10 @@
 				<div id="serio" subrayado="true" color="serio-barra"><a href="serio.html" id="emociones">Serio</a></div>
 				<div id="triste" color="serio-barra"><a href="triste.html" id="emociones">Triste</a></div>
 				<div id="container_lista_canciones">
-					<div id="lista_canciones">
-						<p>Cancion1</p>
-						<p>Cancion2</p>
-						<p>Cancion3</p>
-						<p>Cancion4</p>
-						<p>Cancion5</p>
+					<div id="lista_canciones" data_role="content">
+						<ul id="files-list" data-role="listview" data-autodividers="true" data-split-icon="delete" data-filter-placeholder="Buscar...">
+			               <!--<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>-->
+			            </ul>
 					</div>
 				</div>
 			</div>
