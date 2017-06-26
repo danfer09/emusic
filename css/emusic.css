@@ -10,8 +10,24 @@ h1 {
 	background-color:#000000;
 }
 
-#emociones {
+#copyright {
+	font-size: 19px;
+}
 
+#info-carita,
+#logo-index {
+	text-align: center;
+	align-content: center;
+}
+#info-carita img {
+	height: 200px;
+	width: 200px;
+	border-radius: 50%!important;
+}
+#logo-index img {
+	height: 260px;
+	width: 260px;
+	border-radius: 50%!important;
 }
 
 div[data-role="panel"] {
@@ -82,10 +98,6 @@ a#emociones {
 }
 #lista_canciones ul {
 	margin-top: 7.8%;
-	/*margin-right: 1%;
-	margin-bottom: 1%;
-	margin-left: 1%;
-	overflow-y: scroll;*/
 }
 
 #fondovacioFeliz {
@@ -114,6 +126,13 @@ a#emociones {
 #player {
 	text-align: center;
 }
+#player #media-name {
+	font-size: 18px;
+}
+#player #media-played,
+#player #media-duration {
+	font-size: 25px;
+}
 
 #files-list li a {
 	white-space: pre;
@@ -131,11 +150,18 @@ a#emociones {
 	height: 160px;
 	background-color: lightgrey;
 }
-#reproductor-footer #player-play {
+#reproductor-footer .player-play {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
 	background: url("../img/play.png") no-repeat;
+	background-size: 88px 88px;
+}
+#reproductor-footer .player-pause {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%!important;
+	background: url("../img/pause.png") no-repeat;
 	background-size: 88px 88px;
 }
 
@@ -153,12 +179,27 @@ a#emociones {
 	background: url("../img/prev.png") no-repeat;
 	background-size: 88px 88px;
 }
+#prev:active,
+#prev:focus {
+	opacity: 0.8;
+	border: none!important;
+	box-shadow: none !important;
+	outline-style: none!important;
+}
+
 #next {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%!important;
 	background: url("../img/next.png") no-repeat;
 	background-size: 88px 88px;
+}
+#next:active,
+#next:focus {
+	opacity: 0.8;
+	border: none!important;
+	box-shadow: none !important;
+	outline-style: none!important;
 }
 
 #elegir-emociones {
@@ -198,12 +239,23 @@ a#emociones {
 		background-color: lightgrey;
 	}
 
-	#reproductor-footer #player-play {
+	#reproductor-footer .player-play {
 		width: 60px;
 		height: 60px;
 		border-radius: 50%!important;
 		background: url("../img/play.png") no-repeat;
 		background-size: 58px 58px;
+	}
+	#reproductor-footer .player-pause {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%!important;
+		background: url("../img/pause.png") no-repeat;
+		background-size: 58px 58px;
+	}
+
+	#lista_canciones ul {
+		margin-top: 2.8%;
 	}
 
 	#prev {
@@ -244,10 +296,10 @@ a#emociones {
 	}
 
 	#icono_musica {
-		min-width: 70px;
-		max-width: 70px;
-		min-height: 70px;
-		max-height: 70px;
-		background-color:#B0C4DE;
+		min-width: 130px;
+		max-width: 130px;
+		min-height: 110px;
+		max-height: 110px;
+		background-color: #B0C4DE;
 	}
 }

@@ -3,58 +3,16 @@ function exitFromApp()
 	navigator.app.exitApp();
 }
 
-//Pasar al reproductor.html el nombre de la canción seleccionada
-/*$(document).on( "getActivePage", "#files-list-page",  function( e ) {
-    $('#files-list li a').on('click', function(e) {
-    	alert("click");
-        $(":mobile-pagecontainer").pagecontainer("change", "reproductor.html", {
-            data: {
-                titulo: this.text,
-            },
-            transition: "flip"
-        });
-    });
-});*/
 
-/*
-module.controller('MyCtrl', function($scope, $cordovaMedia) {
+var colorFondo = "azul";
 
-  var src = "/src/audio.mp3";
-  var media = $cordovaMedia.newMedia(src);
+window.setInterval(function() {
+	var color = document.getElementById('lista');
+	var indiceSeleccionado = color.selectedIndex;
+	colorFondo = color.options[indiceSeleccionado].value;
+}, 500);
 
 
-  var iOSPlayOptions = {
-    numberOfLoops: 2,
-    playAudioWhenScreenIsLocked : false
-  }
-
-  media.play(iOSPlayOptions); // iOS only!
-  media.play(); // Android
-
-  media.pause();
-
-  media.stop();
-
-  media.release();
-
-  media.seekTo(5000); // milliseconds value
-
-  media.setVolume(0.5);
-
-  media.startRecord();
-
-  media.stopRecord();
-
-  media.getDuration();
-
-  media.getCurrentPosition().then(...);
-});
-*/
-
-//PONER UN POPUP DE CARGANDO MIENTRAS SE CARGAN LAS CANCIONES (para un futuro):
-/*
-$('#waiting-popup').popup('open');
-$('#waiting-popup').popup('close');*/
 
 var nombre;
 var listaCanciones = [];
@@ -62,6 +20,9 @@ var listaCanciones = [];
 var dondeEstamos=0;
 
 $(document).on( "pagecreate", "#player-page", function( e ) {
+	var urlImg = "img/"+colorFondo+".jpg";
+	$('#icono_musica').attr("src", urlImg);
+
     var titulo = (($(this).data("url").indexOf("?") > 0) ? $(this).data("url") : '-' ).replace(new RegExp("\\+","g"),' ');
     nombre = titulo.split('=')[1];
     $("#media-name").text(nombre);//¿¿¿¿HACER EN EL SETINTERVAL PARA CUANDO SE PASE DE CANCIÓN SE ACTUALICE EL NOMBRE?????
@@ -70,22 +31,37 @@ $(document).on( "pagecreate", "#player-page", function( e ) {
 
     listaDeCanciones();//Carga la lista de canciones en una variable global para ser usada cuando se quiera pasar de canción
 
-    // Pause after 10 seconds
-    /*setTimeout(function () {
-        my_media.pause();
-    }, 10000);*/
-
 });
+
+function secondsToMs(d) {
+    d = Number(d);
+
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+
+    return ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+}
+
 
 window.setInterval(function(){
 	if(my_media){
 		$("#media-name").text(nombre);
-		$('#media-duration').html("<span>"+Math.round(((my_media.getDuration())/60)*100)/100+"</span>");//Durancion en minutos redondeada a dos decimales
+
+		var tiempo = secondsToMs(my_media.getDuration());
+		$('#media-duration').html("<span>"+tiempo+"</span>");//Durancion en minutos redondeada a dos decimales
+
 		var pos;
+		var posTotal = 0;
 		my_media.getCurrentPosition(function(position){
-			pos=position;
-		})
-		$('#media-played').html("<span>"+pos+"</span>");
+			if (position > -1) {
+				pos=secondsToMs(position);
+				$('#media-played').html("<span>"+pos+"</span>");
+			}
+			posTotal = position;
+			if (posTotal < 0) {
+				pasarCancion(0);
+			}
+		}, null);
 	}
 }, 1000);
 
@@ -103,7 +79,7 @@ function playMusic(nombre) {
 	}
 }
 var iniciarAudio = function(url) {
-	if(my_media){
+	if(my_media && status != 4){
 		my_media.stop()
 	}
     // Play the audio file at url
@@ -118,45 +94,37 @@ var iniciarAudio = function(url) {
     );
 
     estamosPrimeraCarga = false;
-    // Play audio
+    $('#player-play').removeClass("player-play");
+	$('#player-play').addClass("player-pause");
+
     my_media.play();
 }
 var playAudio = function(url) {
-    // Play audio
+	$('#player-play').removeClass("player-play");
+	$('#player-play').addClass("player-pause");
     my_media.play();
 }
 var pausaAudio = function(url) {
+	$('#player-play').removeClass("player-pause");
+	$('#player-play').addClass("player-play");
 	my_media.pause();
 }
 
-/*function playMusic() {
-	module.controller('MyCtrl', function($scope, $cordovaMedia) {
-		var src = "android_asset/www/Los Piratas - Años 80.mp3";
-			var media = $cordovaMedia.newMedia(src);
-			media.play();
-	});
-    var my_media = new Media('Los Piratas - Años 80.mp3',
-        // success callback
-        function () {
-        	$('#media-played').html("iniciado!")
-        	console.log("playAudio():Audio Success");
-        },
-        // error callback
-        function (err) {
-        	console.log("playAudio():Audio Error: " + err);
-        }
-    );
-
-    $('#player-play').on('click', function(e) {
-    	// Play audio
-    	my_media.play();
-    });
-}*/
-
 // /emusic/cordova/emusic/www/Los Piratas - Años 80.mp3
 
+function refreshPage()
+{
+    jQuery.mobile.changePage(window.location.href, {
+        allowSamePageTransition: true,
+        transition: 'fade',
+        reloadPage: true
+    });
+}
+
 function refrescarCanciones() {
-	$(":mobile-pagecontainer").pagecontainer("change", "todas_canciones.html", {transition: "pop"});
+	estamosPrimeraCarga = true;
+	borrarTablaMusica = true;
+	refreshPage();
 }
 
 var getRootDir = function(entry) {
@@ -181,29 +149,8 @@ function hacerSelectCancion(nombre, callback) {
 	});
 }
 
-/*DEBUGEO BORRAAAAAAAAAAAAAAAAAAAAAAAAAAAAR*/
-function hacerSelect() {
-	var result = [];
-	db.transaction(function (tx) {
-	  	tx.executeSql('SELECT * FROM SERIO', [], function(tx, rs){
 
-	    for(var i=0; i<rs.rows.length; i++) {
-	    	var row = rs.rows.item(i);
-	        result[i] = {nombre: row['nombre'], fullPath: row['path']};
 
-			alert(result[i].nombre + " " + result[i].fullPath);
-		}
-	  }, successCB, errorCB);
-	});
-	function errorCB(err) {
-	    alert("Error processing SQL: "+err.code);
-	}
-	function successCB() {
-	    //alert("success!");
-	}
-}
-
-var todoRecorrido = 0;
 function buscarcanciones(entry) {
 	buscardirectorio(entry, 0);
 }
@@ -215,13 +162,12 @@ function buscardirectorio (entry, nivel){
 		var i = 0;
 		for (i=0; i < entradas.length; i++) {
 			if(entradas[i].isDirectory){
-				nivelAux = nivel+1;
-				buscardirectorio(entradas[i], nivelAux);
+				buscardirectorio(entradas[i], nivel+1);
 			}
 			else if(entradas[i].isFile){
 				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));
 				if(extension === '.mp3'){
-					guardarEnBD(entradas[i].name, entradas[i].fullPath);//Función no implementada aún
+					guardarEnBD(entradas[i].name, entradas[i].fullPath);
 				}
 			}
 		}
@@ -231,7 +177,6 @@ function buscardirectorio (entry, nivel){
 var db;
 var borrarTablaMusica = true;
 function guardarEnBD(nombreCancion, direccionCancion){
-	db = window.openDatabase("emusic", "1.0", "Cordova Demo", 200000);
 	db.transaction(insertarCancion, errorCB, successCB);
 
 	function insertarCancion(tx) {
@@ -241,10 +186,7 @@ function guardarEnBD(nombreCancion, direccionCancion){
 		}
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS TODAS_MUSICA (nombre varchar(30), path varchar(255) NOT NULL, PRIMARY KEY (path))');
 		tx.executeSql('INSERT INTO TODAS_MUSICA (nombre, path) VALUES (?, ?)', [nombreCancion, direccionCancion]);
-		$(function() {
-			//<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>
-			$("#files-list").append('<li><a href="reproductor.html?nombre='+nombreCancion+'" data-transition="flip" data-role="button">'+nombreCancion+'</a></li>').listview('refresh');
-		});
+
 	}
 
 	function errorCB(err) {
@@ -252,51 +194,97 @@ function guardarEnBD(nombreCancion, direccionCancion){
 	}
 
 	function successCB() {
-	    //alert("success!");
+		listaDeCanciones();
+		//alert("Longitud: "+long+" cancion bbdd: "+nombreCancion+" cancion array: "+listaCanciones[long-1]);
 	}
 }
-/*function cargarBBDD() {
-	window.resolveLocalFileSystemURI("file:///canciones.txt", function (fs) {
-    	fs.root.getFile("canciones.txt", { create: true, exclusive: false }, function (fileEntry) {
-			readFile(fileEntry);
-    	}, onErrorCreateFile);
-	}, onErrorLoadFs);
-}*/
 
-var estamosPrimeraCarga = true;
+
+function setIntervalX(callback, delay, repetitions) {
+    var x = 0;
+    var intervalID = window.setInterval(function () {
+
+       callback();
+
+       if (++x === repetitions) {
+           window.clearInterval(intervalID);
+       }
+    }, delay);
+}
+
+var estamosPrimeraCarga;
+
+function comprobarDB() {
+	db = window.openDatabase("emusic", "1.0", "Cordova Demo", 200000);
+	var long = -1;
+	db.transaction(function(tx){
+		tx.executeSql('CREATE TABLE IF NOT EXISTS YA_CARGADO (cargado VARCHAR(2))');
+		tx.executeSql('SELECT * FROM YA_CARGADO', [], function(t, rs){
+			long = rs.rows.length;
+			if (rs.rows.length == 0) {
+				var si = "si";
+				tx.executeSql('INSERT INTO YA_CARGADO (cargado) VALUES (?)', [si]);
+				alert("BIENVENIDO A EMUSIC");
+				estamosPrimeraCarga = true;
+			} else if (rs.rows.length > 0) {
+				estamosPrimeraCarga = false;
+			}
+		}, null);
+
+	}, errorC, successC);
+
+	function errorC(err) {
+	    alert("Error processing C SQL: "+err.code);
+	}
+
+	function successC() {
+		//alert("Longitud: "+long+" cancion bbdd: "+nombreCancion+" cancion array: "+listaCanciones[long-1]);
+	}
+}
 
 $(document).on( "pagecontainerchange",function(){
 	var pageID = $(':mobile-pagecontainer').pagecontainer('getActivePage')[0].id;
 	if(pageID == "files-list-page"){
-		dondeEstamos=0;
-		if (estamosPrimeraCarga) {
-			borrarTablaMusica = true;
-			var permissions = cordova.plugins.permissions;
-			permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, successR, errorR);
-			function errorR() {
-			  alert("No tenemos permisos");
-			}
-			function successR( status ) {
-			  if( !status.hasPermission ) error();
-			}
-
-			permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, successW, errorW);
-			function errorW() {
-			  alert("No tenemos permisos");
-			}
-			function successW( status ) {
-			  if( !status.hasPermission ) error();
-			}
-
-			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);//ACCEDE A LA CARPETA DE LA APLICACIÓN
-			//window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, getRootDirSD);
-		} else {
-			$(function() {
-				for (var i = 0; i < listaCanciones.length; i++) {
-					$("#files-list").append('<li><a href="reproductor.html?nombre='+listaCanciones[i].nombre+'" data-transition="flip" data-role="button">'+listaCanciones[i].nombre+'</a></li>').listview('refresh');
-				}
-			});
+		//permisos
+		var permissions = cordova.plugins.permissions;
+		permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, successR, errorR);
+		function errorR() {
+		  //alert("No tenemos permisos lectura");
 		}
+		function successR( status ) {
+		  if( !status.hasPermission ) error();
+		}
+
+		permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, successW, errorW);
+		function errorW() {
+		  //alert("No tenemos permisos escritura");
+		}
+		function successW( status ) {
+		  if( !status.hasPermission ) error();
+		}
+
+		comprobarDB();
+
+		dondeEstamos=0;
+		setTimeout(function() {
+			if (estamosPrimeraCarga) {
+				estamosPrimeraCarga = false;
+				borrarTablaMusica = true;
+
+
+				window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, getRootDir);
+			} else {
+				listaDeCanciones();
+			}
+			var i = 0;
+			setIntervalX(function() {
+				while(i < listaCanciones.length) {
+					$("#files-list").append('<li><a href="reproductor.html?nombre='+listaCanciones[i].nombre+'" data-transition="flip" data-role="button">'+listaCanciones[i].nombre+'</a></li>').listview('refresh');
+					i++;
+				}
+			},1000, 3);
+		},700);
+
 	}
 	else if(pageID == "page_feliz"){
 		dondeEstamos=1;
@@ -312,24 +300,7 @@ $(document).on( "pagecontainerchange",function(){
 	}
 });
 
-/*---------------------------------Funciones realizadas el sabado por la noche------------------------------------------------------------------------------*/
-/*----------------------------Cambiar siguiente o anterior canción-------------------------------------------*/
 
-
-/*function listaDeCanciones(nombre,callback){//Se puede llamar desde una funcion, y esta que sea llamada desde onclick del boton siguiente(como hicimos con el play/pause), lo malo es que cada vez que se quiera pasar de canción se tiene que cargar la lista entera de canciones, por eso la descarte
-	db.transaction(function(tx){
-		tx.executeSql('SELECT * FROM TODAS_MUSICA ORDER BY nombre', [], function(tx, rs){
-
-		    for(var i=0; i<rs.rows.length; i++) {
-		    	var row = rs.rows.item(i);
-		        var result[i] = {nombre: row['nombre'], fullPath: row['path']};
-			}
-			callback(nombre,result);
-		}, null);
-
-	});
-
-}*/
 
 
 var listaDeCanciones = function() {//Casi igual a hacerSelect(), para usar hacerSelect tenia que sacar el array fuera y no quería tocarlo, en caso de que se pueda sacar, sacarlo y usar hacerSelect en vez de esta función
@@ -483,7 +454,7 @@ function cargarListaFeliz(){
 		}, null);
 	}
 	function errorCB(err) {
-	    alert("Error processing SQL: "+err.code);
+	    //alert("Error processing SQL: "+err.code);
 	}
 	function successCB() {
 	    //alert("success!");
@@ -508,7 +479,7 @@ function cargarListaTriste(){
 		  }, null);
 	}
 	function errorCB(err) {
-	    alert("Error processing SQL: "+err.code);
+	    //alert("Error processing SQL: "+err.code);
 	}
 	function successCB() {
 	    //alert("success!");
@@ -534,167 +505,10 @@ function cargarListaSerio(){
 		  }, null);
 	}
 	function errorCB(err) {
-	    alert("Error processing SQL: "+err.code);
+	    //alert("Error processing SQL: "+err.code);
 	}
 	function successCB() {
 	    //alert("success!");
 	}
 
 }
-/*------------------------------------------------------------------------------------*/
-/*
-function readFile(fileEntry) {
-
-    fileEntry.file(function (file) {
-        var reader = new FileReader();
-
-        reader.onloadend = function() {
-            alert("Successful file read: " + this.result);
-            displayFileData(fileEntry.fullPath + ": " + this.result);
-        };
-
-        reader.readAsText(file);
-
-    }, onErrorReadFile);
-}*/
-
-/*var buscar = function (entry) {
-	alert(entry.fullPath);//ACCEDE AL /Android/data/com.ucm.Emusic/
-	//ESCALO 3 HACIA ARRIBA Y LLEGO A / DEL DISPOSITIVO
-	alert(dirroot);
-	// Obtengo el DirectoryEntry para 'cordova.file.externalApplicationStorageDirectory
-	var reader = dirroot.createReader();
-	         // compruebo si existe un método readEntries -es el caso
-	if (reader.readEntries) {alert("HAY readEntries");} else {alert("No hay readEntries");}
-	reader.readEntries(function(entradas) {
-		for (var i = 0; i < entradas.length; i++) {
-			alert(entradas[i].isDirectory);
-			alert(entradas[i].fullPath);
-			if(entradas[i].isDirectory)//Comprobamos si es un directorios
-				buscardirectorio(entradas[i]);//Si es un directorio se llama a la funcion recursiva buscardirectorio
-			if(entradas[i].isFile){//Comprobamos si es un fichero
-				extension = entradas[i].name.substr(entradas[i].name.lastIndexOf('.'));//Si es unb fichero comprobamos su terminación
-				if(extension === '.mp3'){
-					alert("es mp3 "+entradas[i].name);
-					//guardarEnBD(entradas[i].name,entradas[i].fullPath);//llamamos a la función para que guarde el nombre y el path de la canción
-				}
-			}
-		}
-	}, function(){alert("Error al leer entradas");});//ESTA LÍNEA ESTA BIEN???, NO ES ALGO RESIDUAL??
-};*/
-
-
-/*
-window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024,
-			function(grantedBytes) {
-			  window.requestFileSystem(PERSISTENT, grantedBytes, onInitFs, errorHandler);
-			}, function(e) {
-			  console.log('Error', e);
-		});
-		function onInitFs(fileSystem) {
-
-			var lector = fileSystem.createReader();
-			lector.readEntries(
-				function (entries) {
-					var bd = Emusic.crearBD('emusic', "1.0", 'Base de datos Emusic', 200000);
-					bd.transaction(function (tx) {
-					   tx.executeSql('CREATE TABLE IF NOT EXISTS TODAS_MUSICA (id int NOT NULL AUTO_INCREMENT, nombre varchar(30), path varchar(255), PRIMARY KEY (id))');
-					});
-				    var extension;
-				    for (var i = 0; i < entries.length; i++) {
-				       	extension = entries[i].name.substr(entries[i].name.lastIndexOf('.'));
-
-				       	if (entries[i].isDirectory === true && recursive === true)
-				        	Emusic.buscarAudio(entries[i].fullPath, recursive, level + 1);
-				       	else if (entries[i].isFile === true && extension === '.mp3')
-				       	{
-				       		bd.transaction(function (tx) {
-							   tx.executeSql('INSERT INTO TODAS_MUSICA (id, nombre, path) VALUES ("", ?, ?'), [entries[i].name, entries[i].fullPath];
-							});
-				       	}
-			    	}
-				},
-				function(error) {
-					console.log('Unable to read the directory. Error: ' + error.code);
-				}
-			);
-		};
-
-		if (level === 0)
-			 $('#waiting-popup').popup('close');
-		console.log('Current path analized is: ' + path);
-*/
-
-/*
-function listPath(myPath){
-  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
-       var directoryReader = dirEntry.createReader();
-       directoryReader.readEntries(onSuccessCallback,onFailCallback);
-  });
-
-  function onSuccessCallback(entries){
-       for (i=0; i<entries.length; i++) {
-           var row = entries[i];
-           var html = '';
-           if(row.isDirectory){
-                 // We will draw the content of the clicked folder
-                 html = '<li onclick="listPath('+"'"+row.nativeURL+"'"+');">'+row.name+'</li>';
-           }else{
-                 // alert the path of file
-                 html = '<li onclick="getFilepath('+"'"+row.nativeURL+"'"+');">'+row.name+'</li>';
-           }
-
-       }
-
-        document.getElementById("files-list").innerHTML = html;
-  }
-
-  function onFailCallback(e){
-    console.error(e);
-    // In case of error
-  }
-}
-
-function getFilepath(thefilepath){
-        alert(thefilepath);
-}
--------------------------*/
-
-
-/*function toArray(list) {
-	return Array.prototype.slice.call(list || [], 0);
-}
-
-function listResults(entries) {
-	// Document fragments can improve performance since they're only appended
-	// to the DOM once. Only one browser reflow occurs.
-	var fragment = document.createDocumentFragment();
-
-	entries.forEach(function(entry, i) {
-		var li = document.createElement('li');
-		li.innerHTML = ['<span>', entry.name, '</span>'].join('');
-		fragment.appendChild(li);
-	});
-
-	document.querySelector('#file-list').appendChild(fragment);
-}
-
-function onInitFs(fs) {
-
-	var dirReader = fs.root.createReader();
-	var entries = [];
-
-	// Call the reader.readEntries() until no more results are returned.
-	var readEntries = function() {
-		dirReader.readEntries (function(results) {
-			if (!results.length) {
-				listResults(entries.sort());
-			} else {
-				entries = entries.concat(toArray(results));
-				readEntries();
-			}
-		}, errorHandler);
-	};
-
-	readEntries(); // Start reading dirs.
-}*/

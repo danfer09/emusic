@@ -3,7 +3,7 @@
 <head>
  	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>EMusic</title>
+	<title>Info Emusic</title>
 	<link rel="stylesheet" type="text/css" href="css/emusic.css" media="all">
 	<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" media="all">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -13,35 +13,23 @@
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
 	<script src="js/emusic.js"></script>
 	<script src="cordova.js"></script>
-
 </head>
 <body>
-
 	<div data-role="page" id="musicPlayer">
 		<header data-role="header" data-position="fixed" data-tap-toggle="false">
-			<h1>EMUSIC</h1>
-			<a href="#closePopup" id="closeApp" data-rel="popup" data-position-to="window" class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all">Salir</a>
-
-			<div data-role="popup" id="closePopup" class="ui-content" data-overlay-theme="a">
-	      		<h6>¿Realmente desea salir de EMUSIC?</h6>
-	      		<div class="ui-grid-b">
-			    	<div class="ui-block-a"><a href="#" data-rel="back" class="ui-btn ui-btn-inline">NO</a></div>
-			    	<div class="ui-block-b"></div>
-			    	<div class="ui-block-c"><a href="#" onclick="exitFromApp()"  class="ui-btn ui-btn-inline">SI</a></div>
-			    </div>
-	    	</div>
+			<a href="#" data-icon="back" data-iconpos="notext" data-rel="back" title="Go back">Atrás</a>
 		</header>
 
 		<div data-role="content" class="ui-content">
-			<div id="logo-index">
-				<a href="todas_canciones.html"><img src="img/icono.png"></a>
+			<br><br><h4><p>EMUSIC es una aplicación creada por Daniel Fernández y Samuel García destinada a la reproducción de audios y la creación de listas de emociones.</p><p>Para su desarrollo se ha usado Cordova CLI.</p></h4><br>
+			<div id="info-carita">
+				<h2>¡Esperamos que os guste!</h2>
+				<img src="img/happy_face.png">
 			</div>
-			<a href="todas_canciones.html" data-role="button"><h1>MI MÚSICA</h1></a>
 		</div>
 
 		<footer data-role="footer" data-position="fixed" data-tap-toggle="false">
             <h3 id="copyright">Creado por Daniel F. y Samuel G.</h3>
-            <a id="credits-button" href="info.html" data-icon="info" data-iconpos="notext" data-position-to="window" class="ui-btn-right">Más información</a>
         </footer>
 	</div>
 

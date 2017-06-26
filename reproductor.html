@@ -22,13 +22,11 @@
 		<div data-role="content">
 			<div id="player">
 				<div id="media-info">
-					<p>Canción: <span id="media-name"></span></p>
-					<img src="img/icono_musica.png" alt="Icono_musica_estandar" id=icono_musica>
-					<!-- En el js aquí meteremos el fullpath para tenerlo a mano y porder reproducirlo -->
+					<p><span id="media-name"></span></p>
+					<img src="img/azul.jpg" alt="Icono_musica_estandar" id=icono_musica>
 					<p class="hidden">Ubicación: <span id="media-path"></span></p>
 					<div>
 						<span id="media-played">-</span> / <span id="media-duration">-</span>
-						<input type="range" name="time-slider" id="time-slider" value="0" min="0" max="100" data-highlight="true" />
 					</div>
 				</div>
 			</div>
@@ -46,9 +44,8 @@
 				</div>
 			</div>
 			<a href="#" data-role="button" id="prev" title="prev" onclick="pasarCancion(1)"></a>
-			<a href="#" data-role="button" id="player-play" title="Play / Pause" onclick="play()"></a>
+			<a href="#" data-role="button" class="player-play" id="player-play" title="Play / Pause" onclick="play()"></a>
 			<a href="#" data-role="button" id="next" title="next" onclick="pasarCancion(0)"></a>
-			<!--<a href="#" id="player-stop" title="Stop"></a>-->
 		</footer>
     </div>
 </body>

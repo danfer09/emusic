@@ -17,29 +17,18 @@
 	<div data-role="page" id="page_triste">
 
 		<div data-role="panel" id="panelOpciones">
-		    <h2>Opciones</h2>
-		    <form method="post" action="">
-	      		<fieldset data-role="controlgroup">
-			      	<legend>Desea iniciar canción al subir el volumen</legend>
-			        <label for="boton_si">Si</label>
-			        <input type="radio" class="hidden" name="botones_volumen" id="boton_si" value="si">
-			        <label for="boton_no">No</label>
-			        <input type="radio" class="hidden" name="botones_volumen" id="boton_no" value="no">
-		      	</fieldset>
-
-		      	<fieldset data-role="controlgroup">
-			      	<legend>Color de fondo en la pantalla de inicio</legend>
-			        <label for="boton_azul">Azul</label>
-			        <input type="radio" class="hidden" name="botones_color" id="boton_azul" value="azul">
-			        <label for="boton_morado">Morado</label>
-			        <input type="radio" class="hidden" name="botones_color" id="boton_morado" value="morado">
-			        <label for="boton_verde">Verde</label>
-			        <input type="radio" class="hidden" name="botones_color" id="boton_verde" value="verde">
-		      	</fieldset>
-
-		      	<input type="submit" data-inline="true" value="Submit">
-		    </form>
-		</div>
+            <h2>Opciones</h2>
+            <form method="post" id="formularioColor" action="emusic.js">
+              <fieldset data-role="controlgroup">
+                 <legend>Color de fondo del reproductor</legend>
+                  <select name="lista" id="lista">
+                     <option value="azul">Azul</option>
+                     <option value="morado">Morado</option>
+                     <option value="verde">Verde</option>
+                  </select>
+               </fieldset>
+            </form>
+         </div>
 
 		<div data-role="header" id="header" >
 			<header data-role="header">
@@ -48,7 +37,6 @@
          </header>
 			<div data-role="navbar">
 				<ul>
-					<!--<li><a href="#" data-rel="back" class="ui-btn ui-icon-back ui-corner-all ui-btn-icon-top">Atrás</a></li>-->
 					<li><a href="todas_canciones.html" class="ui-btn ui-icon-bullets ui-corner-all ui-btn-icon-top">Todas las canciones</a></li>
 	  				<li><a href="index.html" class="ui-btn 	ui-icon-home  ui-corner-all ui-btn-icon-top">Home</a></li>
 		      		<li><a href="#panelOpciones" class="ui-btn ui-icon-gear  ui-corner-all ui-btn-icon-top">Opciones</a></li>
@@ -64,7 +52,6 @@
 				<div id="container_lista_canciones">
 					<div id="lista_canciones" data_role="content">
 						<ul id="files-list" data-role="listview" data-split-icon="delete" >
-			               <!--<li><a href="#" data-transition="flip" data-role="button">Los Piratas - Años 80</a></li>-->
 			            </ul>
 					</div>
 				</div>
